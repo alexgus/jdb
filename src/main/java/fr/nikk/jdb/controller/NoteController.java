@@ -72,7 +72,6 @@ public class NoteController {
 		String ret = "";
 		try {
 			List<Note> ln = this.dao.getData(crit);
-			System.out.println(ln);
 			try {
 				return this.mapper.writeValueAsString(ln);
 			} catch (JsonProcessingException e) {
@@ -86,6 +85,29 @@ public class NoteController {
 		}
 	}
 
+	/**
+	 * Search note by tag
+	 * @return full object having those tag
+	 */
+	@GET
+	@Path("/")
+	public String getNotes(){
+		String ret = "";
+		try {
+			List<Note> ln = this.dao.getData();
+			try {
+				return this.mapper.writeValueAsString(ln);
+			} catch (JsonProcessingException e) {
+				ret = "jdb error :\n";
+				ret += e.getMessage();
+				return ret;
+			}
+		} catch (UnimplementedOperationException e) {
+			e.printStackTrace();
+			return ret;
+		}
+	}
+	
 	/**
 	 * @param dao the dao to set
 	 */

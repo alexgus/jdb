@@ -111,9 +111,9 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 
 			if(lTag.size() > 0){
 				if(lTag.contains(this.available_criteria.get(0))){ // TODO many criteria
-					String crit = this.available_criteria.get(0);
+					String crit = criteria.getString(this.available_criteria.get(0));
 
-					return this.couch.view(this.designDoc+ "/" + ACTION_LISTBY + crit)
+					return this.couch.view(this.designDoc+ "/" + ACTION_LISTBY + this.available_criteria.get(0))
 							.includeDocs(true)
 							.descending(true)
 							.endKey(crit)

@@ -1,4 +1,4 @@
 function(doc) {
-  if(doc.$table == "fr.utbm.to52.smarthome.model.note.Note")
-	  emit([doc.date, doc.tag], doc);
+  if(doc.$table == "fr.nikk.model.note.Note")
+	  emit(doc.tag, doc);
 }
