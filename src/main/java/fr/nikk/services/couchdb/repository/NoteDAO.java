@@ -26,6 +26,7 @@ public class NoteDAO extends AbstractDAO<Note> {
 		this.available_actions.add(AbstractDAO.ACTION_SAVE);
 		this.available_actions.add(AbstractDAO.ACTION_LIST);
 		this.available_actions.add(AbstractDAO.ACTION_LISTBY);
+		this.available_actions.add(AbstractDAO.ACTION_DELETE);
 		
 		this.available_criteria.add(NoteDAO.CRITERIA_TAG);
 		//this.available_criteria.add(NoteDAO.CRITERIA_DATE);

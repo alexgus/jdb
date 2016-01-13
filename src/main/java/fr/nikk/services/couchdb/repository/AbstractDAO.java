@@ -116,7 +116,7 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 					return this.couch.view(this.designDoc+ "/" + ACTION_LISTBY + this.available_criteria.get(0))
 							.includeDocs(true)
 							.descending(true)
-							.endKey(crit)
+							.key(crit)
 							.query(this.typeToHandle);
 				}
 			}

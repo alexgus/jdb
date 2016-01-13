@@ -3,6 +3,7 @@ package fr.nikk.jdb.controller;
 import java.util.Date;
 import java.util.List;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -57,6 +58,28 @@ public class NoteController {
 		} catch (UnimplementedOperationException e1) {
 			e1.printStackTrace();	
 			return "";
+		}
+	}
+	
+	/**
+	 * Delete note
+	 * @param id Id of the note to delete
+	 * @param rev Rev of the object to delete
+	 * @return status json
+	 */
+	@DELETE
+	@Path("/{id}/{rev}")
+	public String delNote(@PathParam("id")String id, @PathParam("rev") String rev){
+		Note n = new Note();
+		n.set_id(id);
+		n.set_rev(rev);
+
+		try {
+			this.dao.delete(n);
+			return "{\"status\" : \"deleted\"}";
+		} catch (UnimplementedOperationException e) {
+			e.printStackTrace();
+			return "{\"status\" : \"error\"}";
 		}
 	}
 	
