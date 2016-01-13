@@ -41,7 +41,8 @@ function openEdit(i){
 		success : function(data){
 			$("#in").html(data);
 			if(i != undefined){
-				$("textarea").val(notes[i].note.replace("</br>", "\r\n"));
+				notes[i].note = notes[i].note.replace(/<\/br>/gi, "\r\n");
+				$("textarea").val(notes[i].note);
 				$("#tag").val(notes[i].tag)
 				$("#sendButton").prop("onclick", null);
 				$("#sendButton").click(function(){
