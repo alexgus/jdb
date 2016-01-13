@@ -4,8 +4,7 @@ function sendNote(i){
 		urlPOST = "http://localhost/proxy9000/note/"+notes[i]._id+"/"+notes[i]._rev + "/" + $("#tag").val() + "/" + $("textarea").val();
 	}
 	else
-		urlPOST = "http://localhost/proxy9000/note/"+ $("#tag").val() + "/" + $("textarea").val();
-	console.log(urlPOST);
+		urlPOST = "http://localhost/proxy9000/note/"+ $("#tag").val() + "/" + $("textarea").val().replace(/\n/g, "%0D%0A");
 	
 	$.ajax({
 		method: "POST",
@@ -42,7 +41,7 @@ function openEdit(i){
 		success : function(data){
 			$("#in").html(data);
 			if(i != undefined){
-				$("textarea").val(notes[i].note);
+				$("textarea").val(notes[i].note.replace("</br>", "\r\n"));
 				$("#tag").val(notes[i].tag)
 				$("#sendButton").prop("onclick", null);
 				$("#sendButton").click(function(){
@@ -60,11 +59,11 @@ function openEdit(i){
 }
 
 function displayNote(i){
-	console.log(notes[i])
+	notes[i].note = notes[i].note.replace(/\r\n/g, "</br>")
 	$("#in").html(
 			"<div class=\"label label-default\">Date : " + new Date(notes[i].date) + "</div></br>"
 			+ "<div class=\"label label-info\">Tag : " + notes[i].tag + "</div></br></br>"
-			+ "<div class=\"alert alert-info\" role=\"alert\" ondblclick=\"openEdit("+i+")\">" + notes[i].note + "</div>"
+			+ "<div class=\"alert alert-info\" role=\"alert\" ondblclick=\"openEdit("+i+")\">" + notes[i].note.replace(/\\r\\n/g, "</br>") + "</div>"
 	);
 }
 
