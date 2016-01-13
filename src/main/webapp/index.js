@@ -16,13 +16,13 @@ function sendNote(i){
 				notes[i] = data;
 				setTimeout(function(){
 					displayNote(i);
-				},2000)
+				},500)
 			}else{
 				notes[notes.length] = data;
 				setTimeout(function(){
 					displayNote(notes.length-1);
 					addNote(data,notes.length-1);
-				},2000)
+				},500)
 			}
 		},
 		error: function(xhr, status, error){
