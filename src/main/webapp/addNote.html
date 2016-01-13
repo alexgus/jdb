@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<title>JDB</title>
+		
+		<meta name="description" content="Journal de bord">
+		<meta name="author" content="Alexandre Guyon">
+		
+		<link rel="shortcut icon" href="favicon.ico">
+		
+		<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+		
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+			integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+			crossorigin="anonymous">
+		
+		<!-- Optional theme -->
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+			integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
+			crossorigin="anonymous">
+		
+		<!-- Latest compiled and minified JavaScript -->
+		<script
+			src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+			integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+			crossorigin="anonymous"></script>
+		
+		
+		<script src="/jdb/index.js" crossorigin="anonymous"></script>
+		
+		<style>
+			textarea {
+				width : 100%;	
+			}
+			
+			body{
+				margin : 0px 0px 0px 0px;
+				padding : 0px 0px 0px 0px;
+			}
+			
+			header{
+				background-color : black;
+				color : white;
+				margin : 0px 0px 15px 0px;
+				padding : 0px 0px 0px 0px;
+			}
+			
+			h1{
+				margin : 0px 0px 0px 0px;
+				padding : 15px 0px 15px 15px;
+			}
+		</style>
+		
+	</head>
+	<body>
+		<header>
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="">JDB</a>
+					</div>
+		
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav">
+							<li><a href="index.html">Home</a></li>
+							<li class="active"><a href="addNote.html">Add Note <span class="sr-only">(current)</span></a></li>
+							<li><a href="listNote.html">List notes</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</header>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-6">
+					<textarea autofocus="true" col="90" rows="20" style="widht : 100% ;"></textarea>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+			</br>
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-6">
+					Tags : <input type="text" class="form-control"/></br>
+					<button button type="button" class="btn btn-primary" onclick="sendNote()">Send</button>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+		</div>
+	</body>
+</html>

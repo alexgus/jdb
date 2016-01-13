@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<title>JDB</title>
+		
+		<meta name="description" content="Journal de bord">
+		<meta name="author" content="Alexandre Guyon">
+		
+		<link rel="shortcut icon" href="favicon.ico">
+		
+		<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+		
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+			integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+			crossorigin="anonymous">
+		
+		<!-- Optional theme -->
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+			integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
+			crossorigin="anonymous">
+		
+		<!-- Latest compiled and minified JavaScript -->
+		<script
+			src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+			integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+			crossorigin="anonymous"></script>
+		
+		
+		<script src="/jdb/index.js" crossorigin="anonymous"></script>
+		
+		<link rel="stylesheet" href="main.css">
+		
+	</head>
+	<body  onload="onload()">
+		<header>
+			<nav id="header" class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="#">JDB</a>
+					</div>
+		
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav">
+							<li class="active"><a href="index.html">Home <span class="sr-only">(current)</span></a></li>
+							<li><a href="addNote.html">Add Note</a></li>
+							<li><a href="listNote.html">List notes</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</header>
+		<div class="container-fluid full">
+			<div class="row full">
+				<div id="list" class="col-md-3 full">
+					<div class="list-group full">
+						<a href="#" class="list-group-item" id="search">
+							<div class="input-group">
+     								<span class="input-group-btn">
+       									<button class="btn btn-default" type="button" onclick="resetSearch()">Reset</button>
+     								</span>
+     								<input type="text" class="form-control" placeholder="Search for tags">
+     								<span class="input-group-btn">
+       									<button class="btn btn-default" type="button" onclick="searchTag()">Go</button>
+     								</span>
+   							</div>
+						</a>
+						<a href="#" class="list-group-item" onclick="openEdit()">
+							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New note
+						</a>
+					</div>
+				</div>
+				<div id="in" class="col-md-9">
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
