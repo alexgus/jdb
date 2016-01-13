@@ -161,6 +161,7 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 		if(this.available_actions.contains(ACTION_LIST))
 			return this.couch.view(this.designDoc + "/" + ACTION_LIST)
 					.includeDocs(true)
+					.descending(true)
 					.query(this.typeToHandle);
 		throw new UnimplementedOperationException(ACTION_LIST + " : not for now");
 	}
