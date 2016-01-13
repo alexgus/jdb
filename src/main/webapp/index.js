@@ -1,15 +1,29 @@
-function sendNote(){
+function sendNote(i){
+	var urlPOST; 
+	if(i != undefined){
+		urlPOST = "http://localhost/proxy9000/note/"+notes[i]._id+"/"+notes[i]._rev + "/" + $("#tag").val() + "/" + $("textarea").val();
+	}
+	else
+		urlPOST = "http://localhost/proxy9000/note/"+ $("#tag").val() + "/" + $("textarea").val();
+	console.log(urlPOST);
+	
 	$.ajax({
 		method: "POST",
-		url: "http://localhost/proxy9000/note/"+ $("input").val() + "/" + $("textarea").val(),
+		url: urlPOST,
 		success : function(data){
 			$("#notif").html("<div class=\"alert alert-success\" role=\"alert\">Saved !</div>");
-			notes[notes.length] = data;
-			setTimeout(function(){
-				displayNote(notes.length-1);
-				addNote(data,notes.length-1);
-			},2000)
-			
+			if(i != undefined){
+				notes[i] = data;
+				setTimeout(function(){
+					displayNote(i);
+				},2000)
+			}else{
+				notes[notes.length] = data;
+				setTimeout(function(){
+					displayNote(notes.length-1);
+					addNote(data,notes.length-1);
+				},2000)
+			}
 		},
 		error: function(xhr, status, error){
 			$("#notif").html("<div class=\"alert alert-danger\" role=\"alert\">Server error !</div>");
@@ -21,12 +35,20 @@ function sendNote(){
 	
 }
 
-function openEdit(){
+function openEdit(i){
 	$.ajax({
 		method: "POST",
 		url: "http://localhost/jdb/form.html",
 		success : function(data){
 			$("#in").html(data);
+			if(i != undefined){
+				$("textarea").val(notes[i].note);
+				$("#tag").val(notes[i].tag)
+				$("#sendButton").prop("onclick", null);
+				$("#sendButton").click(function(){
+					sendNote(i);
+				});
+			}
 		},
 		error: function(xhr, status, error){
 			$("#in").html("Error");
@@ -38,10 +60,11 @@ function openEdit(){
 }
 
 function displayNote(i){
+	console.log(notes[i])
 	$("#in").html(
 			"<div class=\"label label-default\">Date : " + new Date(notes[i].date) + "</div></br>"
 			+ "<div class=\"label label-info\">Tag : " + notes[i].tag + "</div></br></br>"
-			+ "<div class=\"alert alert-info\" role=\"alert\">" + notes[i].note + "</div>"
+			+ "<div class=\"alert alert-info\" role=\"alert\" ondblclick=\"openEdit("+i+")\">" + notes[i].note + "</div>"
 	);
 }
 

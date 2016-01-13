@@ -84,6 +84,33 @@ public class NoteController {
 	}
 	
 	/**
+	 * Modify note
+	 * @param id Id of the note to delete
+	 * @param rev Rev of the object to delete
+	 * @param tag Tag, comma separated
+	 * @param note Note
+	 * @return status json
+	 */
+	@POST
+	@Path("/{id}/{rev}/{tag}/{note}")
+	public String modNote(@PathParam("id")String id, @PathParam("rev") String rev, @PathParam("tag") String tag, @PathParam("note") String note){
+		Note n = new Note();
+		n.set_id(id);
+		n.set_rev(rev);
+		n.setDate(new Date());
+		n.setTag(tag);
+		n.setNote(note);
+
+		try {
+			this.dao.update(n);
+			return this.mapper.writeValueAsString(n);
+		} catch (UnimplementedOperationException | JsonProcessingException e) {
+			e.printStackTrace();
+			return "{\"status\" : \"error\"}";
+		}
+	}
+	
+	/**
 	 * Add a note
 	 * @param tag Tag, comma separated
 	 * @param note Note
