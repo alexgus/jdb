@@ -16,7 +16,9 @@ function toURL(texte){
 		if((texte.charCodeAt(i) < 48)
 				|| (texte.charCodeAt(i) > 57 && texte.charCodeAt(i) < 65)
 				|| (texte.charCodeAt(i) > 90 && texte.charCodeAt(i) < 97)
-				|| (texte.charCodeAt(i) > 122)){
+				|| (texte.charCodeAt(i) > 122 && texte.charCodeAt(i) < 140)
+				|| (texte.charCodeAt(i) > 140 && texte.charCodeAt(i) < 156)
+				|| (texte.charCodeAt(i) > 156 && texte.charCodeAt(i) < 192)){
 			if(texte.charCodeAt(i) < 16)
 				newTexte += "%0" + parseInt(texte.charCodeAt(i),10).toString(16); // convert base 10 to 16
 			else
