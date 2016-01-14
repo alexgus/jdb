@@ -50,15 +50,15 @@ function getNotes(){
 }
 
 function sendNote(i){
-	console.log(i)
 	var urlPOST;
 	var note = toURL($("textarea").val());
+	var tag = toURL($("#tag").val());
 	
 	if(i != undefined){
-		urlPOST = "http://localhost/proxy9000/note/"+notes[i]._id+"/"+notes[i]._rev + "/" + $("#tag").val() + "/" + note;
+		urlPOST = "http://localhost/proxy9000/note/"+notes[i]._id+"/"+notes[i]._rev + "/" + tag + "/" + note;
 	}
 	else{
-		urlPOST = "http://localhost/proxy9000/note/"+ $("#tag").val() + "/" + note;
+		urlPOST = "http://localhost/proxy9000/note/"+ tag + "/" + note;
     }
 	
 	console.log(urlPOST)
@@ -71,7 +71,7 @@ function sendNote(i){
 				notes[i] = data;
 				setTimeout(function(){
 					displayNote(i);
-					addNote(data,notes.length-1);
+					modDisplayedNote(data,i);
 				},500)
 			}else{
 				notes[notes.length] = data;
@@ -169,6 +169,14 @@ function displayNote(i){
 			+ "<div class=\"label label-info\">Tag : " + notes[i].tag + "</div></br></br>"
 			+ "<div class=\"alert alert-info\" role=\"alert\" ondblclick=\"openEdit("+i+")\">" + notes[i].note + "</div>"
 	);
+}
+
+function modDisplayedNote(note, i){
+	console.log(i)
+	var list = $("#list > div").children()
+	var element = $(list[list.length - 1 - i]); 
+	element.find(".note").html(note.note)
+	element.find(".label").html(note.tag)
 }
 
 function deleteAllNotes(){
