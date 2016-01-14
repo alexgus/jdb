@@ -80,7 +80,6 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 		this.designDoc = classname.substring(0, classname.indexOf("dao"));
 
 		this.couch = s;
-		System.out.println(this.designDoc);
 		s.design().synchronizeWithDb(s.design().getFromDesk(this.designDoc));
 
 		this.typeToHandle = d;
@@ -162,7 +161,6 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 		if(this.available_actions.contains(ACTION_LIST))
 			return this.couch.view(this.designDoc + "/" + ACTION_LIST)
 					.includeDocs(true)
-					.descending(true)
 					.query(this.typeToHandle);
 		throw new UnimplementedOperationException(ACTION_LIST + " : not for now");
 	}
