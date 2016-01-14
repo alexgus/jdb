@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 import org.lightcouch.CouchDbClient;
+import org.lightcouch.Response;
 
 /**
  * 
@@ -17,15 +18,17 @@ public interface DAO<D>{
 
 	/**
 	 * @param data Save data D
+	 * @return The response of the server (for id et rev mainly)
 	 * @throws UnimplementedOperationException If the method does not exist for the DAO
 	 */
-	public void save(D data) throws UnimplementedOperationException;
+	public Response save(D data) throws UnimplementedOperationException;
 	
 	/**
 	 * @param data Update selected data
+	 * @return The response of the server (for id et rev mainly)
 	 * @throws UnimplementedOperationException If the method does not exist for the DAO
 	 */
-	public void update(D data) throws UnimplementedOperationException;
+	public Response update(D data) throws UnimplementedOperationException;
 	
 	/**
 	 * @param data Delete selected data

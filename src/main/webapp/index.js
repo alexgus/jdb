@@ -1,4 +1,15 @@
 
+var notes;
+
+////////////////////////
+// Util
+////////////////////////
+
+function onload(){
+	getNotes();
+	openEdit();
+}
+
 function toURL(texte){
 	var newTexte = "";
 	for(var i = 0 ; i < texte.length ; ++i){
@@ -16,7 +27,30 @@ function toURL(texte){
 	return newTexte;
 }
 
+////////////////////////
+// Com
+////////////////////////
+
+function getNotes(){
+	$.ajax({
+		method: "GET",
+		url: "http://localhost/proxy9000/note",
+		success : function(d){
+			notes = d;
+			for(var i = 0 ; i < d.length ; ++i){
+				addNote(d[i],i);
+			}
+		},
+		error: function(xhr, status, error){
+			console.log(xhr);
+			console.log(status);
+			console.log(error);
+		}
+	})
+}
+
 function sendNote(i){
+	console.log(i)
 	var urlPOST;
 	var note = toURL($("textarea").val());
 	
@@ -26,6 +60,7 @@ function sendNote(i){
 	else{
 		urlPOST = "http://localhost/proxy9000/note/"+ $("#tag").val() + "/" + note;
     }
+	
 	console.log(urlPOST)
 	$.ajax({
 		method: "POST",
@@ -56,6 +91,46 @@ function sendNote(i){
 	
 }
 
+function deleteNote(i){
+	$(".note"+i).remove();
+	// ask confirm
+	$.ajax({
+		method: "DELETE",
+		url: "http://localhost/proxy9000/note/"+notes[i]._id+"/"+notes[i]._rev,
+		success : function(data){
+			setTimeout(function(){
+				openEdit();
+			},10);
+		},
+		error: function(xhr, status, error){
+			$("#in").html("Error");
+			console.log(xhr);
+			console.log(status);
+			console.log(error);
+		}
+	})
+	
+}
+
+function searchTag(){
+	deleteAllNotes();
+	$.ajax({
+		method: "GET",
+		url: "http://localhost/proxy9000/note/gTag/" + $("#search input").val(),
+		success : function(d){
+			notes = d;
+			for(var i = 0 ; i < d.length ; ++i){
+				addNote(d[i],i);
+			}
+		},
+		error: function(xhr, status, error){
+			console.log(xhr);
+			console.log(status);
+			console.log(error);
+		}
+	})
+}
+
 function openEdit(i){
 	$.ajax({
 		method: "POST",
@@ -81,6 +156,10 @@ function openEdit(i){
 	})
 }
 
+////////////////////////
+// View
+////////////////////////
+
 function displayNote(i){
 	notes[i].note = notes[i].note.replace(/\r\n/g, "</br>");
 	notes[i].note = notes[i].note.replace(/\r/g, "</br>");
@@ -90,29 +169,6 @@ function displayNote(i){
 			+ "<div class=\"label label-info\">Tag : " + notes[i].tag + "</div></br></br>"
 			+ "<div class=\"alert alert-info\" role=\"alert\" ondblclick=\"openEdit("+i+")\">" + notes[i].note + "</div>"
 	);
-}
-
-var notes;
-
-function deleteNote(i){
-	$(".note"+i).remove();
-	// ask confirm
-	$.ajax({
-		method: "DELETE",
-		url: "http://localhost/proxy9000/note/"+notes[i]._id+"/"+notes[i]._rev,
-		success : function(data){
-			setTimeout(function(){
-				openEdit();
-			},10);
-		},
-		error: function(xhr, status, error){
-			$("#in").html("Error");
-			console.log(xhr);
-			console.log(status);
-			console.log(error);
-		}
-	})
-	
 }
 
 function deleteAllNotes(){
@@ -134,48 +190,6 @@ function addNote(note,i){
 			+ "<div class=\"label label-info\">" + note.tag + "</div>"
 			+ "<div class=\"note\">" + note.note + "</div>" +
 		"</a>");
-}
-
-function getNotes(){
-	$.ajax({
-		method: "GET",
-		url: "http://localhost/proxy9000/note",
-		success : function(d){
-			notes = d;
-			for(var i = 0 ; i < d.length ; ++i){
-				addNote(d[i],i);
-			}
-		},
-		error: function(xhr, status, error){
-			console.log(xhr);
-			console.log(status);
-			console.log(error);
-		}
-	})
-}
-
-function searchTag(){
-	deleteAllNotes();
-	$.ajax({
-		method: "GET",
-		url: "http://localhost/proxy9000/note/gTag/" + $("#search input").val(),
-		success : function(d){
-			notes = d;
-			for(var i = 0 ; i < d.length ; ++i){
-				addNote(d[i],i);
-			}
-		},
-		error: function(xhr, status, error){
-			console.log(xhr);
-			console.log(status);
-			console.log(error);
-		}
-	})
-}
-
-function onload(){
-	getNotes();
-	openEdit();
 }
 
 

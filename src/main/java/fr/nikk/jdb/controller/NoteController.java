@@ -11,6 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.json.JSONObject;
+import org.lightcouch.Response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,7 +46,9 @@ public class NoteController {
 		n.setNote(note);
 		n.setTag(tag);
 		try {
-			this.dao.save(n);
+			Response r = this.dao.save(n);
+			n.set_id(r.getId());
+			n.set_rev(r.getRev());
 			
 			String ret = "";
 			try {
@@ -58,55 +61,6 @@ public class NoteController {
 		} catch (UnimplementedOperationException e1) {
 			e1.printStackTrace();	
 			return "";
-		}
-	}
-	
-	/**
-	 * Delete note
-	 * @param id Id of the note to delete
-	 * @param rev Rev of the object to delete
-	 * @return status json
-	 */
-	@DELETE
-	@Path("/{id}/{rev}")
-	public String delNote(@PathParam("id")String id, @PathParam("rev") String rev){
-		Note n = new Note();
-		n.set_id(id);
-		n.set_rev(rev);
-
-		try {
-			this.dao.delete(n);
-			return "{\"status\" : \"deleted\"}";
-		} catch (UnimplementedOperationException e) {
-			e.printStackTrace();
-			return "{\"status\" : \"error\"}";
-		}
-	}
-	
-	/**
-	 * Modify note
-	 * @param id Id of the note to delete
-	 * @param rev Rev of the object to delete
-	 * @param tag Tag, comma separated
-	 * @param note Note
-	 * @return status json
-	 */
-	@POST
-	@Path("/{id}/{rev}/{tag}/{note}")
-	public String modNote(@PathParam("id")String id, @PathParam("rev") String rev, @PathParam("tag") String tag, @PathParam("note") String note){
-		Note n = new Note();
-		n.set_id(id);
-		n.set_rev(rev);
-		n.setDate(new Date());
-		n.setTag(tag);
-		n.setNote(note);
-
-		try {
-			this.dao.update(n);
-			return this.mapper.writeValueAsString(n);
-		} catch (UnimplementedOperationException | JsonProcessingException e) {
-			e.printStackTrace();
-			return "{\"status\" : \"error\"}";
 		}
 	}
 	
@@ -142,20 +96,45 @@ public class NoteController {
 	}
 	
 	/**
+	 * Modify note
+	 * @param id Id of the note to delete
+	 * @param rev Rev of the object to delete
+	 * @param tag Tag, comma separated
+	 * @param note Note
+	 * @return status json
+	 */
+	@POST
+	@Path("/{id}/{rev}/{tag}/{note}")
+	public String modNote(@PathParam("id")String id, @PathParam("rev") String rev, @PathParam("tag") String tag, @PathParam("note") String note){
+		Note n = new Note();
+		n.set_id(id);
+		n.set_rev(rev);
+		n.setDate(new Date());
+		n.setTag(tag);
+		n.setNote(note);
+
+		try {
+			Response r = this.dao.update(n);
+			n.set_rev(r.getRev());
+			return this.mapper.writeValueAsString(n);
+		} catch (UnimplementedOperationException | JsonProcessingException e) {
+			e.printStackTrace();
+			return "{\"status\" : \"error\"}";
+		}
+	}
+	
+	/**
 	 * Search note by tag
-	 * @param tag Tag to search
 	 * @return full object having those tag
 	 */
 	@GET
-	@Path("/gTag/{tag}")
-	public String getNoteByTag(@PathParam("tag") String tag){
-		JSONObject crit = new JSONObject();
-		crit.put(NoteDAO.CRITERIA_TAG, tag);
+	@Path("/")
+	public String getNotes(){
 		String ret = "";
 		try {
-			List<Note> ln = this.dao.getData(crit);
+			List<Note> ln = this.dao.getData();
 			try {
-				return this.mapper.writeValueAsString(ln);
+				return this.mapper.writeValueAsString(ln); 
 			} catch (JsonProcessingException e) {
 				ret = "jdb error :\n";
 				ret += e.getMessage();
@@ -192,19 +171,22 @@ public class NoteController {
 			return ret;
 		}
 	}
-
+	
 	/**
 	 * Search note by tag
+	 * @param tag Tag to search
 	 * @return full object having those tag
 	 */
 	@GET
-	@Path("/")
-	public String getNotes(){
+	@Path("/gTag/{tag}")
+	public String getNoteByTag(@PathParam("tag") String tag){
+		JSONObject crit = new JSONObject();
+		crit.put(NoteDAO.CRITERIA_TAG, tag);
 		String ret = "";
 		try {
-			List<Note> ln = this.dao.getData();
+			List<Note> ln = this.dao.getData(crit);
 			try {
-				return this.mapper.writeValueAsString(ln); 
+				return this.mapper.writeValueAsString(ln);
 			} catch (JsonProcessingException e) {
 				ret = "jdb error :\n";
 				ret += e.getMessage();
@@ -213,6 +195,29 @@ public class NoteController {
 		} catch (UnimplementedOperationException e) {
 			e.printStackTrace();
 			return ret;
+		}
+	}
+	
+	
+	/**
+	 * Delete note
+	 * @param id Id of the note to delete
+	 * @param rev Rev of the object to delete
+	 * @return status json
+	 */
+	@DELETE
+	@Path("/{id}/{rev}")
+	public String delNote(@PathParam("id")String id, @PathParam("rev") String rev){
+		Note n = new Note();
+		n.set_id(id);
+		n.set_rev(rev);
+
+		try {
+			this.dao.delete(n);
+			return "{\"status\" : \"deleted\"}";
+		} catch (UnimplementedOperationException e) {
+			e.printStackTrace();
+			return "{\"status\" : \"error\"}";
 		}
 	}
 	

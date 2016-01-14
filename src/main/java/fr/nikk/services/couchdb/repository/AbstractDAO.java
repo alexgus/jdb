@@ -8,9 +8,12 @@ import java.util.List;
 
 import org.json.JSONObject;
 import org.lightcouch.CouchDbClient;
+import org.lightcouch.Response;
 import org.lightcouch.View;
 
 import fr.nikk.util.BasicIO;
+
+// TODO add response
 
 /**
  * @author Alexandre Guyon
@@ -149,11 +152,13 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 	}
 
 	@Override
-	public void save(D data) throws UnimplementedOperationException{
+	public Response save(D data) throws UnimplementedOperationException{
+		Response r;
 		if(this.available_actions.contains(ACTION_SAVE))
-			this.couch.save(data);
+			 r = this.couch.save(data);
 		else
 			throw new UnimplementedOperationException(ACTION_SAVE + " : not for now");
+		return r;
 	}
 
 	@Override
@@ -174,11 +179,13 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 	}
 
 	@Override
-	public void update(D data) throws UnimplementedOperationException{
+	public Response update(D data) throws UnimplementedOperationException{
+		Response r;
 		if(this.available_actions.contains(ACTION_UPDATE))
-			this.couch.update(data);
+			r = this.couch.update(data);
 		else
 			throw new UnimplementedOperationException(ACTION_UPDATE + " : not for now");
+		return r;
 	}
 
 	@Override
