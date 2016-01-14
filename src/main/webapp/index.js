@@ -1,8 +1,25 @@
 
-function sendNote(i){
-	var urlPOST; 
-    var note = $("textarea").val().replace(/\n/gi, "%0D%0A");
+function toURL(texte){
+	var newTexte = "";
+	for(var i = 0 ; i < texte.length ; ++i){
+		if((texte.charCodeAt(i) < 48)
+				|| (texte.charCodeAt(i) > 57 && texte.charCodeAt(i) < 65)
+				|| (texte.charCodeAt(i) > 90 && texte.charCodeAt(i) < 97)
+				|| (texte.charCodeAt(i) > 122)){
+			if(texte.charCodeAt(i) < 16)
+				newTexte += "%0" + parseInt(texte.charCodeAt(i),10).toString(16); // convert base 10 to 16
+			else
+				newTexte += "%" + parseInt(texte.charCodeAt(i),10).toString(16); // convert base 10 to 16
+		}else
+			newTexte += texte[i];
+	}
+	return newTexte;
+}
 
+function sendNote(i){
+	var urlPOST;
+	var note = toURL($("textarea").val());
+	
 	if(i != undefined){
 		urlPOST = "http://localhost/proxy9000/note/"+notes[i]._id+"/"+notes[i]._rev + "/" + $("#tag").val() + "/" + note;
 	}
@@ -65,7 +82,9 @@ function openEdit(i){
 }
 
 function displayNote(i){
-	notes[i].note = notes[i].note.replace(/\r\n/g, "</br>")
+	notes[i].note = notes[i].note.replace(/\r\n/g, "</br>");
+	notes[i].note = notes[i].note.replace(/\r/g, "</br>");
+	notes[i].note = notes[i].note.replace(/\n/g, "</br>");
 	$("#in").html(
 			"<div class=\"label label-default\">Date : " + new Date(notes[i].date) + "</div></br>"
 			+ "<div class=\"label label-info\">Tag : " + notes[i].tag + "</div></br></br>"
