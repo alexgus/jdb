@@ -1,11 +1,15 @@
+
 function sendNote(i){
 	var urlPOST; 
+    var note = $("textarea").val().replace(/\n/gi, "%0D%0A");
+
 	if(i != undefined){
-		urlPOST = "http://localhost/proxy9000/note/"+notes[i]._id+"/"+notes[i]._rev + "/" + $("#tag").val() + "/" + $("textarea").val();
+		urlPOST = "http://localhost/proxy9000/note/"+notes[i]._id+"/"+notes[i]._rev + "/" + $("#tag").val() + "/" + note;
 	}
-	else
-		urlPOST = "http://localhost/proxy9000/note/"+ $("#tag").val() + "/" + $("textarea").val().replace(/\n/g, "%0D%0A");
-	
+	else{
+		urlPOST = "http://localhost/proxy9000/note/"+ $("#tag").val() + "/" + note;
+    }
+	console.log(urlPOST)
 	$.ajax({
 		method: "POST",
 		url: urlPOST,
@@ -15,6 +19,7 @@ function sendNote(i){
 				notes[i] = data;
 				setTimeout(function(){
 					displayNote(i);
+					addNote(data,notes.length-1);
 				},500)
 			}else{
 				notes[notes.length] = data;
@@ -64,7 +69,7 @@ function displayNote(i){
 	$("#in").html(
 			"<div class=\"label label-default\">Date : " + new Date(notes[i].date) + "</div></br>"
 			+ "<div class=\"label label-info\">Tag : " + notes[i].tag + "</div></br></br>"
-			+ "<div class=\"alert alert-info\" role=\"alert\" ondblclick=\"openEdit("+i+")\">" + notes[i].note.replace(/\\r\\n/g, "</br>") + "</div>"
+			+ "<div class=\"alert alert-info\" role=\"alert\" ondblclick=\"openEdit("+i+")\">" + notes[i].note + "</div>"
 	);
 }
 
@@ -104,7 +109,7 @@ function resetSearch(){
 }
 
 function addNote(note,i){
-	$("#list > div").append("<a href=\"#\" id=\"itemList\" class=\"list-group-item note"+ i +"\" onclick=\"displayNote("+i+")\">" 
+	$($("#list > div").children()[1]).after("<a href=\"#\" id=\"itemList\" class=\"list-group-item note"+ i +"\" onclick=\"displayNote("+i+")\">" 
 			+ "<div class=\"label label-default\">" + new Date(note.date) + "</div>" 
 			+ "<span onclick=\"deleteNote("+i+")\" class=\"glyphicon glyphicon-remove deleteFromList\" aria-hidden=\"true\"></span></br>"
 			+ "<div class=\"label label-info\">" + note.tag + "</div>"

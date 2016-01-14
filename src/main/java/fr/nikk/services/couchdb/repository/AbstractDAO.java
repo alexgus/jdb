@@ -80,6 +80,7 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 		this.designDoc = classname.substring(0, classname.indexOf("dao"));
 
 		this.couch = s;
+		System.out.println(this.designDoc);
 		s.design().synchronizeWithDb(s.design().getFromDesk(this.designDoc));
 
 		this.typeToHandle = d;
