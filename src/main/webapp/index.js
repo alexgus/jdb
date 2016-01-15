@@ -1,13 +1,17 @@
 
 var notes;
+var tags = new Array();
 
 ////////////////////////
 // Util
 ////////////////////////
 
 function onload(){
+	getTags();
 	getNotes();
-	openEdit();
+	setTimeout(function(){ // wait for tags to be reeived
+		openEdit();
+	},200);
 }
 
 function toURL(texte){
@@ -114,6 +118,23 @@ function deleteNote(i){
 	
 }
 
+function getTags(){
+	$.ajax({
+		method: "GET",
+		url: "http://localhost/proxy9000/note/gTag",
+		success : function(d){
+			tags = new Array();
+			for(var i = 0 ; i < d.rows.length ; ++i)
+				tags[tags.length] = d.rows[i].key
+		},
+		error: function(xhr, status, error){
+			console.log(xhr);
+			console.log(status);
+			console.log(error);
+		}
+	})
+}
+
 function searchTag(){
 	deleteAllNotes();
 	$.ajax({
@@ -139,6 +160,19 @@ function openEdit(i){
 		url: "http://localhost/jdb/form.html",
 		success : function(data){
 			$("#in").html(data);
+			$("#tag").autocomplete({
+				  source: tags,
+				  minLength: 0,
+				  position: { 
+					  my : "top", 
+					  at: "bottom",
+					  collision: "flip"
+				  },
+				  close : function(){
+					  // count enter
+				  }
+			});
+			
 			if(i != undefined){
 				notes[i].note = notes[i].note.replace(/<\/br>/gi, "\r\n");
 				$("textarea").val(notes[i].note);

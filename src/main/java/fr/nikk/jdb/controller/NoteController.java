@@ -222,6 +222,17 @@ public class NoteController {
 	}
 	
 	/**
+	 * Get all tags
+	 * @return status json
+	 */
+	@GET
+	@Path("/gTag")
+	public String getTag(){
+		String res = this.dao.getTag();
+		return res;
+	}
+	
+	/**
 	 * @param dao the dao to set
 	 */
 	public void setDao(NoteDAO dao) {
