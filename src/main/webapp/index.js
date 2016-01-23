@@ -200,10 +200,20 @@ function displayNote(i){
 	notes[i].note = notes[i].note.replace(/\r\n/g, "</br>");
 	notes[i].note = notes[i].note.replace(/\r/g, "</br>");
 	notes[i].note = notes[i].note.replace(/\n/g, "</br>");
+	
+	if(notes[i].dateModif != undefined && notes[i].dateModif.length > 0){
+		var dates = "";
+		for(var j = notes[i].dateModif.length - 1 ; j > notes[i].dateModif.length - 4; --j){
+			dates += "&nbsp;" + new Date(notes[i].dateModif[j]) + "&nbsp;</br>";
+		}
+		dates += "&nbsp;" + new Date(notes[i].dateModif[notes[i].dateModif.length - 1])
+	}
+	
 	$("#in").html(
-			"<div class=\"label label-default\">Date : " + new Date(notes[i].date) + "</div></br>"
-			+ "<div class=\"label label-info\">Tag : " + notes[i].tag + "</div></br></br>"
-			+ "<div class=\"alert alert-info\" role=\"alert\" ondblclick=\"openEdit("+i+")\">" + notes[i].note + "</div>"
+			"<div class=\"label label-primary label-tag\">Creation date : " + new Date(notes[i].date) + "</div></br>"
+			+ (dates == undefined ? "" : "<div class=\"label label-info label-tag\">Modification dates : " + dates + "</div></br>")
+			+ "<div class=\"label label-danger label-tag\">Tag : " + notes[i].tag + "</div></br></br>"
+			+ "<div class=\"alert alert-info label-tag\" role=\"alert\" ondblclick=\"openEdit("+i+")\">" + notes[i].note + "</div>"
 	);
 }
 
@@ -229,9 +239,9 @@ function resetSearch(){
 
 function addNote(note,i){
 	$($("#list > div").children()[1]).after("<a href=\"#\" id=\"itemList\" class=\"list-group-item note"+ i +"\" onclick=\"displayNote("+i+")\">" 
-			+ "<div class=\"label label-default\">" + new Date(note.date) + "</div>" 
+			+ "<div class=\"label label-primary\">" + new Date(note.date) + "</div>" 
 			+ "<span onclick=\"deleteNote("+i+")\" class=\"glyphicon glyphicon-remove deleteFromList\" aria-hidden=\"true\"></span></br>"
-			+ "<div class=\"label label-info\">" + note.tag + "</div>"
+			+ "<div class=\"label label-danger\">" + note.tag + "</div>"
 			+ "<div class=\"note\">" + note.note + "</div>" +
 		"</a>");
 }
