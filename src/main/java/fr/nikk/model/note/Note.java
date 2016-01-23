@@ -3,7 +3,9 @@
  */
 package fr.nikk.model.note;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import fr.nikk.services.couchdb.StorableEntity;
 
@@ -14,6 +16,8 @@ import fr.nikk.services.couchdb.StorableEntity;
 public class Note extends StorableEntity{
 	
 	private Date date;
+	
+	private List<Date> dateModif;
 
 	private String tag;
 
@@ -25,6 +29,7 @@ public class Note extends StorableEntity{
 	public Note(){
 		super(Note.class.getName());
 		this.date = new Date();
+		this.dateModif = new ArrayList<>();
 	}
 	
 	/**
@@ -86,6 +91,20 @@ public class Note extends StorableEntity{
 	 */
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	/**
+	 * @return the dateModif
+	 */
+	public List<Date> getDateModif() {
+		return this.dateModif;
+	}
+
+	/**
+	 * @param dateModif the dateModif to set
+	 */
+	public void setDateModif(List<Date> dateModif) {
+		this.dateModif = dateModif;
 	}
 
 	/* (non-Javadoc)
