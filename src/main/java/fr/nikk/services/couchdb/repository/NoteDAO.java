@@ -47,5 +47,17 @@ public class NoteDAO extends AbstractDAO<Note> {
 			.queryForStream();
 		return BasicIO.readInputStream(is);
 	}
+	
+	@SuppressWarnings("resource")
+	@Override
+	public String getByIdAndRev(String id, String rev){
+		InputStream is;
+		if(rev != null)
+			is = this.couch.find(id, rev);
+		else
+			is = this.couch.find(id);
+		
+		return BasicIO.readInputStream(is);
+	}
 
 }

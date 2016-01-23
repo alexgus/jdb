@@ -17,6 +17,13 @@ import org.lightcouch.Response;
 public interface DAO<D>{
 
 	/**
+	 * @param id The id to search
+	 * @param rev The rev to search
+	 * @return The corresponding data
+	 */
+	public String getByIdAndRev(String id, String rev);
+	
+	/**
 	 * @param data Save data D
 	 * @return The response of the server (for id et rev mainly)
 	 * @throws UnimplementedOperationException If the method does not exist for the DAO

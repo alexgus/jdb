@@ -39,6 +39,7 @@ public class Note extends StorableEntity{
 		super(Note.class.getName());
 		this.note = note;
 		this.date = new Date();
+		this.dateModif = new ArrayList<>();
 	}
 
 	/**
@@ -49,6 +50,7 @@ public class Note extends StorableEntity{
 		super(Note.class.getName());
 		this.date = d;
 		this.note = s;
+		this.dateModif = new ArrayList<>();
 	}
 
 	/**

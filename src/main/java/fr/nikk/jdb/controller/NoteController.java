@@ -1,5 +1,6 @@
 package fr.nikk.jdb.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.lightcouch.Response;
 
@@ -109,9 +111,17 @@ public class NoteController {
 		Note n = new Note();
 		n.set_id(id);
 		n.set_rev(rev);
-		n.setDate(new Date());
 		n.setTag(tag);
 		n.setNote(note);
+		
+		JSONArray dates = new JSONObject(this.dao.getByIdAndRev(id, rev)).getJSONArray("dateModif");
+		List<Date> d = new ArrayList<>(); 
+		for (int i= 0 ; i < dates.length() ; ++i){
+			d.add(new Date(dates.getString(i)));
+		}
+		d.add(new Date());
+		
+		n.setDateModif(d);
 
 		try {
 			Response r = this.dao.update(n);
