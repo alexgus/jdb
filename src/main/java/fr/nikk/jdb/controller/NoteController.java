@@ -113,14 +113,17 @@ public class NoteController {
 		n.set_rev(rev);
 		n.setTag(tag);
 		n.setNote(note);
+		List<Date> d = new ArrayList<>();
 		
-		JSONArray dates = new JSONObject(this.dao.getByIdAndRev(id, rev)).getJSONArray("dateModif");
-		List<Date> d = new ArrayList<>(); 
-		for (int i= 0 ; i < dates.length() ; ++i){
-			d.add(new Date(dates.getString(i)));
+		if(new JSONObject(this.dao.getByIdAndRev(id, rev)).has("dateModif")){
+			JSONArray dates = new JSONObject(this.dao.getByIdAndRev(id, rev)).getJSONArray("dateModif");
+			 
+			for (int i= 0 ; i < dates.length() ; ++i){
+				d.add(new Date(dates.getString(i)));
+			}	
 		}
-		d.add(new Date());
 		
+		d.add(new Date());
 		n.setDateModif(d);
 
 		try {

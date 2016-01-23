@@ -203,7 +203,7 @@ function displayNote(i){
 	
 	if(notes[i].dateModif != undefined && notes[i].dateModif.length > 0){
 		var dates = "";
-		for(var j = notes[i].dateModif.length - 1 ; j > notes[i].dateModif.length - 4; --j){
+		for(var j = notes[i].dateModif.length - 1 ; j >=0 && j > notes[i].dateModif.length - 4; --j){
 			dates += "&nbsp;" + new Date(notes[i].dateModif[j]) + "&nbsp;</br>";
 		}
 		dates += "&nbsp;" + new Date(notes[i].dateModif[notes[i].dateModif.length - 1])
