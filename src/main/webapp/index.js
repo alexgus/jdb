@@ -236,4 +236,14 @@ function addNote(note,i){
 		"</a>");
 }
 
+function niceInput(){
+	var text = $("textarea").val();
+	
+	text = text.replace(/->/gi,"arrow");
+	text = text.replace(/=>/gi,"big arrow");
+	text = text.replace(/ \*/gi,"point");
+	
+	$("textarea").val(text);
+}
+
 
