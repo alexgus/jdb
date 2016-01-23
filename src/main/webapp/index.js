@@ -214,6 +214,7 @@ function displayNote(i){
 			+ (dates == undefined ? "" : "<div class=\"label label-info label-tag\">Modification dates : " + dates + "</div></br>")
 			+ "<div class=\"label label-danger label-tag\">Tag : " + notes[i].tag + "</div></br></br>"
 			+ "<div class=\"alert alert-info label-tag\" role=\"alert\" ondblclick=\"openEdit("+i+")\">" + notes[i].note + "</div>"
+			+ "<button type=\"button\" class=\"btn btn-danger\" onclick=\"deleteNote("+i+")\" style=\"float:right\">Supress</button>"
 	);
 }
 
@@ -249,9 +250,9 @@ function addNote(note,i){
 function niceInput(){
 	var text = $("textarea").val();
 	
-	text = text.replace(/->/gi,"arrow");
-	text = text.replace(/=>/gi,"big arrow");
-	text = text.replace(/ \*/gi,"point");
+	text = text.replace(/->/gi,"\u2192");
+	text = text.replace(/=>/gi,"\u21D2");
+	text = text.replace(/ \*/gi," •");
 	
 	$("textarea").val(text);
 }
