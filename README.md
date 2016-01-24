@@ -1,2 +1,2 @@
 # jdb
-Journal de bord (notes, contacts)
+Journal de bord (notes, ...)
