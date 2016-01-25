@@ -174,7 +174,7 @@ function openEdit(i){
 			});
 			
 			if(i != undefined){
-				notes[i].note = notes[i].note.replace(/<\/br>/gi, "\r\n");
+				//notes[i].note = notes[i].note.replace(/<\/br>/gi, "\r\n"); // Textarea to div with editable content
 				$("#textEdit").html(notes[i].note);
 				$("#tag").val(notes[i].tag)
 				$("#sendButton").prop("onclick", null);
