@@ -223,7 +223,7 @@ function modDisplayedNote(note, i){
 	var list = $("#list > div").children()
 	var element = $(list[list.length - 1 - i]); 
 	element.find(".note").html(note.note)
-	element.find(".label").html(note.tag)
+	element.find(".label-danger").html(note.tag)
 }
 
 function deleteAllNotes(){
