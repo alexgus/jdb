@@ -115,16 +115,22 @@ public class NoteController {
 		n.setNote(note);
 		List<Date> d = new ArrayList<>();
 		
-		if(new JSONObject(this.dao.getByIdAndRev(id, rev)).has("dateModif")){
-			JSONArray dates = new JSONObject(this.dao.getByIdAndRev(id, rev)).getJSONArray("dateModif");
+		JSONObject js = new JSONObject(this.dao.getByIdAndRev(id, rev));
+		if(js.has("dateModif")){
+			JSONArray dates = js.getJSONArray("dateModif");
 			 
 			for (int i= 0 ; i < dates.length() ; ++i){
 				d.add(new Date(dates.getString(i)));
-			}	
+			}
 		}
 		
 		d.add(new Date());
 		n.setDateModif(d);
+		
+		if(js.has("date"))
+			n.setDate(new Date(js.getString("date")));
+		else
+			return "{\"status\" : \"no creation date in database\"}";
 
 		try {
 			Response r = this.dao.update(n);
