@@ -1,3 +1,5 @@
+var noteServiceURL = "http://localhost/proxy9000";
+var pageURL = "http://localhost/jdb"; // TODO could be deduce with page info
 
 var notes;
 var tags = new Array();
@@ -40,7 +42,7 @@ function toURL(texte){
 function getNotes(){
 	$.ajax({
 		method: "GET",
-		url: "http://localhost/proxy9000/note",
+		url: noteServiceURL + "/note",
 		success : function(d){
 			notes = d;
 			for(var i = 0 ; i < d.length ; ++i){
@@ -61,10 +63,10 @@ function sendNote(i){
 	var tag = toURL($("#tag").val());
 	
 	if(i != undefined){
-		urlPOST = "http://localhost/proxy9000/note/"+notes[i]._id+"/"+notes[i]._rev + "/" + tag + "/" + note;
+		urlPOST = noteServiceURL + "/note/"+notes[i]._id+"/"+notes[i]._rev + "/" + tag + "/" + note;
 	}
 	else{
-		urlPOST = "http://localhost/proxy9000/note/"+ tag + "/" + note;
+		urlPOST = noteServiceURL + "/note/"+ tag + "/" + note;
     }
 	
 	console.log(urlPOST)
@@ -102,7 +104,7 @@ function deleteNote(i){
 	// ask confirm
 	$.ajax({
 		method: "DELETE",
-		url: "http://localhost/proxy9000/note/"+notes[i]._id+"/"+notes[i]._rev,
+		url: noteServiceURL + "/note/"+notes[i]._id+"/"+notes[i]._rev,
 		success : function(data){
 			setTimeout(function(){
 				openEdit();
@@ -121,7 +123,7 @@ function deleteNote(i){
 function getTags(){
 	$.ajax({
 		method: "GET",
-		url: "http://localhost/proxy9000/note/gTag",
+		url: noteServiceURL + "/note/gTag",
 		success : function(d){
 			tags = new Array();
 			for(var i = 0 ; i < d.rows.length ; ++i)
@@ -139,7 +141,7 @@ function searchTag(){
 	deleteAllNotes();
 	$.ajax({
 		method: "GET",
-		url: "http://localhost/proxy9000/note/gTag/" + $("#search input").val(),
+		url: noteServiceURL + "/note/gTag/" + $("#search input").val(),
 		success : function(d){
 			notes = d;
 			for(var i = 0 ; i < d.length ; ++i){
@@ -157,7 +159,7 @@ function searchTag(){
 function openEdit(i){
 	$.ajax({
 		method: "POST",
-		url: "http://localhost/jdb/form.html",
+		url: pageURL + "/form.html",
 		success : function(data){
 			$("#in").html(data);
 			$("#tag").autocomplete({
