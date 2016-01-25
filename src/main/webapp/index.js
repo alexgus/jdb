@@ -51,7 +51,7 @@ function paste(e){
 				img.src = result;
 				document.getElementById("editablediv").appendChild(img);
 				
-				// TODO Save in db
+				// TODO Save in db (cannot be saved via REST URL)
 			};
 			/*Read the image file*/
 			reader.readAsDataURL(imageFile);
@@ -180,7 +180,9 @@ function searchTag(){
 	})
 }
 
+var editing;
 function openEdit(i){
+	editing = i;
 	$.ajax({
 		method: "POST",
 		url: pageURL + "/form.html",

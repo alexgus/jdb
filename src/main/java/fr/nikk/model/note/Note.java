@@ -22,6 +22,8 @@ public class Note extends StorableEntity{
 	private String tag;
 
 	private String note;
+	
+	private List<String> res;
 
 	/**
 	 * Default constructor
@@ -107,6 +109,20 @@ public class Note extends StorableEntity{
 	 */
 	public void setDateModif(List<Date> dateModif) {
 		this.dateModif = dateModif;
+	}
+
+	/**
+	 * @return the res
+	 */
+	public List<String> getRes() {
+		return this.res;
+	}
+
+	/**
+	 * @param res the res to set
+	 */
+	public void setRes(List<String> res) {
+		this.res = res;
 	}
 
 	/* (non-Javadoc)
