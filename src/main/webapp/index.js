@@ -57,7 +57,7 @@ function getNotes(){
 
 function sendNote(i){
 	var urlPOST;
-	var note = toURL($("textarea").val());
+	var note = toURL($("#textEdit").val());
 	var tag = toURL($("#tag").val());
 	
 	if(i != undefined){
@@ -175,7 +175,7 @@ function openEdit(i){
 			
 			if(i != undefined){
 				notes[i].note = notes[i].note.replace(/<\/br>/gi, "\r\n");
-				$("textarea").val(notes[i].note);
+				$("#textEdit").val(notes[i].note);
 				$("#tag").val(notes[i].tag)
 				$("#sendButton").prop("onclick", null);
 				$("#sendButton").click(function(){
@@ -247,14 +247,68 @@ function addNote(note,i){
 		"</a>");
 }
 
+// for decrement cursor position
+var niceLength = 0;
+function niceText(text){
+	if(text != undefined){
+		var back = text;
+		
+		text = text.replace(/-&gt;/gi,"\u2192");
+		if(back != text){
+			niceLength = 1;
+			back = text;
+		}
+		text = text.replace(/=&gt;/gi,"\u21D2");
+		if(back != text){
+			niceLength = 1;
+			back = text;
+		}
+		text = text.replace(/&nbsp;\*/gi," •");
+		if(back != text){
+			niceLength = 0;
+			back = text;
+		}
+		text = text.replace(/->/gi,"\u2192");
+		if(back != text){
+			niceLength = 1;
+			back = text;
+		}
+		text = text.replace(/=>/gi,"\u21D2");
+		if(back != text){
+			niceLength = 1;
+			back = text;
+		}
+		text = text.replace(/ \*/gi," •");
+		if(back != text){
+			niceLength = 0;
+			back = text;
+		}
+		
+		return text;
+	}
+}
+
 function niceInput(){
-	var text = $("textarea").val();
-	
-	text = text.replace(/->/gi,"\u2192");
-	text = text.replace(/=>/gi,"\u21D2");
-	text = text.replace(/ \*/gi," •");
-	
-	$("textarea").val(text);
+	var range = document.getSelection().getRangeAt(0);
+	var startPoint = range.startContainer;
+	var startOffset = range.startOffset;
+	var endPoint = range.endContainer;
+	var endOffset = range.endOffset;
+
+	var copyContent = startPoint.textContent;
+	if(startPoint.textContent != niceText(copyContent)){ // If content modified
+		// Search modified node
+		var tab = $("#textEdit").get(0).childNodes;
+		var i = 0;
+		while(i < tab.length && tab[i].textContent != startPoint.textContent)
+			++i;
+		if(i < tab.length){ // Found at i
+			startPoint.textContent = niceText(startPoint.textContent);
+			console.log(niceLength)
+			range.setStart(tab[i], startOffset - niceLength);
+			range.setEnd(tab[i], endOffset - niceLength);
+		}
+	}
 }
 
 
