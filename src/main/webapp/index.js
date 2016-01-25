@@ -57,7 +57,7 @@ function getNotes(){
 
 function sendNote(i){
 	var urlPOST;
-	var note = toURL($("#textEdit").val());
+	var note = toURL($("#textEdit").html());
 	var tag = toURL($("#tag").val());
 	
 	if(i != undefined){
@@ -175,7 +175,7 @@ function openEdit(i){
 			
 			if(i != undefined){
 				notes[i].note = notes[i].note.replace(/<\/br>/gi, "\r\n");
-				$("#textEdit").val(notes[i].note);
+				$("#textEdit").html(notes[i].note);
 				$("#tag").val(notes[i].tag)
 				$("#sendButton").prop("onclick", null);
 				$("#sendButton").click(function(){
