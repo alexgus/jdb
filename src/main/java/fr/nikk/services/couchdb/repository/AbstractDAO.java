@@ -3,6 +3,7 @@
  */
 package fr.nikk.services.couchdb.repository;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import fr.nikk.util.BasicIO;
 /**
  * @author Alexandre Guyon
  * @param <D> Data to handle in DAO
- *
+ * Daughter class MUST be name "something"DAO
  */
 @SuppressWarnings("boxing")
 public abstract class AbstractDAO<D> implements DAO<D> {
@@ -63,6 +64,9 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 	 */
 	protected List<String> available_actions = new ArrayList<>();
 
+	/**
+	 * Class to handle in database
+	 */
 	private Class<D> typeToHandle; 
 
 	/**
@@ -80,6 +84,7 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 				.getSimpleName()
 				.toLowerCase();
 
+		// Get "something"DAO
 		this.designDoc = classname.substring(0, classname.indexOf("dao"));
 
 		this.couch = s;
@@ -104,6 +109,18 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 		}
 
 		return lc;
+	}
+	
+	@SuppressWarnings("resource")
+	@Override
+	public String getByIdAndRev(String id, String rev){
+		InputStream is;
+		if(rev != null)
+			is = this.couch.find(id, rev);
+		else
+			is = this.couch.find(id);
+		
+		return BasicIO.readInputStream(is);
 	}
 
 	@Override

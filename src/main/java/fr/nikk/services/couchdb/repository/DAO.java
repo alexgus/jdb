@@ -17,13 +17,15 @@ import org.lightcouch.Response;
 public interface DAO<D>{
 
 	/**
+	 * Get a specific object in database (U in CRUD)
 	 * @param id The id to search
-	 * @param rev The rev to search
+	 * @param rev The rev to search (can be null)
 	 * @return The corresponding data
 	 */
 	public String getByIdAndRev(String id, String rev);
 	
 	/**
+	 * Create an object in database (C in CRUD)
 	 * @param data Save data D
 	 * @return The response of the server (for id et rev mainly)
 	 * @throws UnimplementedOperationException If the method does not exist for the DAO
@@ -31,6 +33,7 @@ public interface DAO<D>{
 	public Response save(D data) throws UnimplementedOperationException;
 	
 	/**
+	 * Update an object in database (U in CRUD)
 	 * @param data Update selected data
 	 * @return The response of the server (for id et rev mainly)
 	 * @throws UnimplementedOperationException If the method does not exist for the DAO
@@ -38,13 +41,14 @@ public interface DAO<D>{
 	public Response update(D data) throws UnimplementedOperationException;
 	
 	/**
+	 * Delete an object in database (D in CRUD)
 	 * @param data Delete selected data
 	 * @throws UnimplementedOperationException If the method does not exist for the DAO
 	 */
 	public void delete(D data) throws UnimplementedOperationException;
 	
 	/**
-	 * Get all the data from this type
+	 * Get all the data from this type (R in CRUD). Not optimized (long list)
 	 * @return Collection of data
 	 * @throws UnimplementedOperationException If the method does not exist for the DAO
 	 */
