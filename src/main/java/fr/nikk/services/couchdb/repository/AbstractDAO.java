@@ -159,7 +159,7 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 					return AbstractDAO.getStringFromView(this.couch.view(this.designDoc+ "/" + ACTION_LISTBY + crit)
 							.includeDocs(true)
 							.descending(true)
-							.endKey(crit));
+							.key(crit));
 				}
 			}
 			else
@@ -214,7 +214,7 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 	}
 
 	/**
-	 * Get string from view
+	 * Get string from view. The view must be created in your own and give to this DAO.
 	 * @param v The view to query
 	 * @return the string result from database
 	 */
