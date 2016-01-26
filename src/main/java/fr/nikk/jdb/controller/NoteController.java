@@ -1,5 +1,7 @@
 package fr.nikk.jdb.controller;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +14,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.lightcouch.Response;
 
@@ -108,6 +111,8 @@ public class NoteController {
 	@POST
 	@Path("/{id}/{rev}/{tag}/{note}")
 	public String modNote(@PathParam("id")String id, @PathParam("rev") String rev, @PathParam("tag") String tag, @PathParam("note") String note){
+		DateFormat df = DateFormat.getDateInstance();
+		
 		Note n = new Note();
 		n.set_id(id);
 		n.set_rev(rev);
@@ -117,19 +122,27 @@ public class NoteController {
 		
 		JSONObject js = new JSONObject(this.dao.getByIdAndRev(id, rev));
 		if(js.has("dateModif")){
-			JSONArray dates = js.getJSONArray("dateModif");
-			 
+			JSONArray dates = js.getJSONArray("dateModif");			
+			
 			for (int i= 0 ; i < dates.length() ; ++i){
-				d.add(new Date(dates.getString(i)));
+				try {
+					d.add(df.parse(dates.getString(i)));
+				} catch (JSONException | ParseException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		
 		d.add(new Date());
 		n.setDateModif(d);
 		
-		if(js.has("date"))
-			n.setDate(new Date(js.getString("date")));
-		else
+		if(js.has("date")){
+			try {
+				n.setDate(df.parse(js.getString("date")));
+			} catch (JSONException | ParseException e1) {
+				e1.printStackTrace();
+			}
+		}else
 			return "{\"status\" : \"no creation date in database\"}";
 
 		try {
