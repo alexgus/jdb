@@ -9,12 +9,14 @@ import org.json.JSONObject;
 import org.lightcouch.CouchDbClient;
 import org.lightcouch.Response;
 
+import fr.nikk.services.couchdb.StorableEntity;
+
 /**
  * 
  * @author Alexandre Guyon
  * @param <D> Data to save
  */
-public interface DAO<D>{
+public interface DAO<D extends StorableEntity>{
 
 	/**
 	 * Get a specific object in database (U in CRUD)

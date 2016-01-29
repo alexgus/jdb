@@ -21,6 +21,7 @@ import org.lightcouch.CouchDbClient;
 import org.lightcouch.Response;
 import org.lightcouch.View;
 
+import fr.nikk.services.couchdb.StorableEntity;
 import fr.nikk.util.BasicIO;
 
 // TODO add response
@@ -31,7 +32,7 @@ import fr.nikk.util.BasicIO;
  * Daughter class MUST be name "something"DAO
  */
 @SuppressWarnings("boxing")
-public abstract class AbstractDAO<D> implements DAO<D> {
+public abstract class AbstractDAO<D extends StorableEntity> implements DAO<D> {
 
 	/**
 	 * Save Action
@@ -111,6 +112,10 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 
 		
 	}
+	
+	/*public List<String> getRevisions(D d){
+		this.couch.find(designDoc.getClass(), d.get_id()
+	}*/
 	
 	private void createFiles() throws FileSystemException{
 		URL designDocs = AbstractDAO.class.getClassLoader().getResource("design-docs");
