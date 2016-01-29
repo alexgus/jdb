@@ -3,7 +3,15 @@
  */
 package fr.nikk.services.couchdb.repository;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,14 +91,55 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 		String classname = this.getClass()
 				.getSimpleName()
 				.toLowerCase();
-
+		
+		this.typeToHandle = d;
+		
 		// Get "something"DAO
 		this.designDoc = classname.substring(0, classname.indexOf("dao"));
 
+		
+		// Create used files for CRUD operations
+		this.createFiles();
+		
 		this.couch = s;
 		s.design().synchronizeWithDb(s.design().getFromDesk(this.designDoc));
 
-		this.typeToHandle = d;
+		
+	}
+	
+	private void createFiles(){
+		URL designDocs = AbstractDAO.class.getClassLoader().getResource("design-docs");
+		
+		URL listFolder = AbstractDAO.class.getClassLoader().getResource("design-docs/" + this.designDoc + "1" + "/views/list");
+		// Create folders if not exists
+		if(listFolder == null){
+			try {
+				listFolder = new URL(designDocs.toString() + "/" + this.designDoc + "/views/list");
+				File f = new File(listFolder.toURI());
+				if(!f.exists()){
+					if(!f.mkdirs())
+						System.err.println("Error in creating folders for DAO"); // TODO Exception
+				}
+			} catch (MalformedURLException | URISyntaxException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		URL listFile = AbstractDAO.class.getClassLoader().getResource("design-docs/" + this.designDoc + "/views/list/map.js");
+		// Create files if not exists
+		if(listFile == null){
+			try {
+				listFile = new URL(designDocs.toString() + "/" + this.designDoc + "/views/list");
+				
+				Path p = FileSystems.getDefault().getPath(listFolder.getPath(), "map.js");
+				Files.createFile(p);
+				
+				BasicIO.write(listFile.getPath() + "/map.js", "function(doc) { if(doc.$table == \"" + this.typeToHandle.getName() +"\") { emit(doc.date, doc); } }");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
 	}
 
 	/**

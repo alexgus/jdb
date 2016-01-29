@@ -94,18 +94,16 @@ public class BasicIO {
 		return content;
 	}
 	
-
-
 	/**
 	 * Write content to a file
-	 * @param path The path to the file
+	 * @param f File to write
 	 * @param content The content to write
 	 */
 	@SuppressWarnings("resource")
-	public static void write(String path, String content){
+	public static void write(File f, String content){
 		try {
 
-			FileWriter fw = new FileWriter(path);
+			FileWriter fw = new FileWriter(f);
 			BufferedWriter bw = new BufferedWriter(fw);
 			bw.write(content);
 			bw.flush();
@@ -115,7 +113,17 @@ public class BasicIO {
 
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-	}
+		} 
+	}	
 
+	/**
+	 * Write content to a file
+	 * @param path The path to the file
+	 * @param content The content to write
+	 */
+	public static void write(String path, String content){
+		File f = new File(path);
+		BasicIO.write(f, content);
+	}
+	
 }
