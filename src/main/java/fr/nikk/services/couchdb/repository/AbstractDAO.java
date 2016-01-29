@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.FileSystemException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -99,7 +100,11 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 
 		
 		// Create used files for CRUD operations
-		this.createFiles();
+		try {
+			this.createFiles();
+		} catch (FileSystemException e) {
+			e.printStackTrace();
+		}
 		
 		this.couch = s;
 		s.design().synchronizeWithDb(s.design().getFromDesk(this.designDoc));
@@ -107,7 +112,7 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 		
 	}
 	
-	private void createFiles(){
+	private void createFiles() throws FileSystemException{
 		URL designDocs = AbstractDAO.class.getClassLoader().getResource("design-docs");
 		
 		URL listFolder = AbstractDAO.class.getClassLoader().getResource("design-docs/" + this.designDoc + "1" + "/views/list");
@@ -118,7 +123,7 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 				File f = new File(listFolder.toURI());
 				if(!f.exists()){
 					if(!f.mkdirs())
-						System.err.println("Error in creating folders for DAO"); // TODO Exception
+						throw new FileSystemException(f.getAbsolutePath(), "", "Cannot create directory");
 				}
 			} catch (MalformedURLException | URISyntaxException e) {
 				e.printStackTrace();
@@ -131,6 +136,7 @@ public abstract class AbstractDAO<D> implements DAO<D> {
 			try {
 				listFile = new URL(designDocs.toString() + "/" + this.designDoc + "/views/list");
 				
+				@SuppressWarnings("null")
 				Path p = FileSystems.getDefault().getPath(listFolder.getPath(), "map.js");
 				Files.createFile(p);
 				
