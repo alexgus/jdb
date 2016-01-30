@@ -3,6 +3,10 @@
  */
 package fr.nikk.services.couchdb;
 
+import java.util.List;
+
+import fr.nikk.services.couchdb.repository.Revision;
+
 /**
  * @author Alexandre Guyon
  *
@@ -22,7 +26,7 @@ public abstract class StorableEntity {
 	/**
 	 * List of all available revisions of an object
 	 */
-	protected String _revs_info;
+	protected List<Revision> _revs_info;
 	
 	/**
 	 * Table name
@@ -68,14 +72,14 @@ public abstract class StorableEntity {
 	/**
 	 * @return the _revs_info
 	 */
-	public String get_revs_info() {
+	public List<Revision> get_revs_info() {
 		return this._revs_info;
 	}
 
 	/**
 	 * @param _revs_info the _revs_info to set
 	 */
-	public void set_revs_info(String _revs_info) {
+	public void set_revs_info(List<Revision> _revs_info) {
 		this._revs_info = _revs_info;
 	}
 

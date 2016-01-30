@@ -173,7 +173,8 @@ public class Note extends StorableEntity{
 	 */
 	@Override
 	public String toString() {
-		return "Note [date=" + this.date + ", tag=" + this.tag + ", note=" + this.note + "]";
+		return "Note [date=" + this.date + ", dateModif=" + this.dateModif + ", tag=" + this.tag + ", note=" + this.note + ", res=" + this.res
+				+ ", _id=" + this._id + ", _rev=" + this._rev + ", _revs_info=" + this._revs_info + ", $table=" + this.$table + "]";
 	}
 
 }

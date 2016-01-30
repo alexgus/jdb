@@ -120,6 +120,8 @@ public class NoteController {
 		n.setNote(note);
 		List<Date> d = new ArrayList<>();
 		
+		this.dao.getRevisions(n);
+		
 		JSONObject js = new JSONObject(this.dao.getByIdAndRev(id, rev));
 		if(js.has("dateModif")){
 			JSONArray dates = js.getJSONArray("dateModif");			

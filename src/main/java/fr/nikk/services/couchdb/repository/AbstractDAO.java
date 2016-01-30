@@ -18,8 +18,12 @@ import java.util.List;
 
 import org.json.JSONObject;
 import org.lightcouch.CouchDbClient;
+import org.lightcouch.Params;
 import org.lightcouch.Response;
 import org.lightcouch.View;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.nikk.services.couchdb.StorableEntity;
 import fr.nikk.util.BasicIO;
@@ -113,9 +117,35 @@ public abstract class AbstractDAO<D extends StorableEntity> implements DAO<D> {
 		
 	}
 	
-	/*public List<String> getRevisions(D d){
-		this.couch.find(designDoc.getClass(), d.get_id()
-	}*/
+	/**
+	 * Get list of all available revision for a specific document
+	 * @param d The document containing the id
+	 * @return List of all available revisions for this document
+	 */
+	public List<Revision> getRevisions(D d){
+		D tmp = this.couch.find(this.typeToHandle, d.get_id(), new Params().revsInfo());
+		return tmp.get_revs_info();
+	}
+	
+	/**
+	 * Get the specific revision for a document
+	 * @param d The document containing the id
+	 * @param rev The revision to get. Integer between 1 and N corresponding to the number of revision  
+	 * @return The asked revision
+	 */
+	public D getRevision(D d, int rev){
+		List<Revision> lr = this.getRevisions(d);
+		if(lr.isEmpty())
+			return null;
+		
+		int i = 0;
+		while(i < lr.size() && Integer.parseInt(lr.get(i).getRev().split("-")[0]) != rev)
+			++i;
+		if(i >= lr.size())
+			return null;
+		
+		return this.getByIdAndRev(d.get_id(), lr.get(i).getRev());
+	}
 	
 	private void createFiles() throws FileSystemException{
 		URL designDocs = AbstractDAO.class.getClassLoader().getResource("design-docs");
@@ -172,15 +202,36 @@ public abstract class AbstractDAO<D extends StorableEntity> implements DAO<D> {
 	}
 	
 	@SuppressWarnings("resource")
-	@Override
-	public String getByIdAndRev(String id, String rev){
-		InputStream is;
+	private InputStream getByIdAndRevIntern(String id, String rev){
+		InputStream is = null;
 		if(rev != null)
 			is = this.couch.find(id, rev);
 		else
 			is = this.couch.find(id);
-		
+		return is;
+	}
+	
+	@SuppressWarnings("resource")
+	@Override
+	public String getByIdAndRevRaw(String id, String rev){
+		InputStream is = this.getByIdAndRevIntern(id, rev);
 		return BasicIO.readInputStream(is);
+	}
+	
+	@SuppressWarnings("resource")
+	@Override
+	public D getByIdAndRev(String id, String rev){
+		InputStream is = this.getByIdAndRevIntern(id, rev);
+		D ret = null;
+		
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+			ret = mapper.readValue(is, this.typeToHandle);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return ret;
 	}
 
 	@Override

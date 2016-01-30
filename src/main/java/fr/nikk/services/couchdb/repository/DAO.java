@@ -24,7 +24,15 @@ public interface DAO<D extends StorableEntity>{
 	 * @param rev The rev to search (can be null)
 	 * @return The corresponding data
 	 */
-	public String getByIdAndRev(String id, String rev);
+	public D getByIdAndRev(String id, String rev);
+	
+	/**
+	 * Get a specific object in database (U in CRUD)
+	 * @param id The id to search
+	 * @param rev The rev to search (can be null)
+	 * @return The corresponding data
+	 */
+	public String getByIdAndRevRaw(String id, String rev);
 	
 	/**
 	 * Create an object in database (C in CRUD)
