@@ -1,11 +1,16 @@
 package fr.nikk.jdb.controller;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -32,8 +37,10 @@ import fr.nikk.services.couchdb.repository.UnimplementedOperationException;
  */
 @Produces("text/json")
 @Path("/note")
-public class NoteController {
-	
+public class NoteController extends HttpServlet{
+
+	private static final long serialVersionUID = -4819435890845510207L;
+
 	private NoteDAO dao;
 	
 	private ObjectMapper mapper = new ObjectMapper();
@@ -264,6 +271,12 @@ public class NoteController {
 	public String getTag(){
 		String res = this.dao.getTag();
 		return res;
+	}
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		super.doGet(req, resp);
+		resp.getWriter().append("<h1>Coucou</h1");
 	}
 	
 	/**

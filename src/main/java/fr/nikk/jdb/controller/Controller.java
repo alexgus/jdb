@@ -6,6 +6,7 @@ package fr.nikk.jdb.controller;
 import fr.nikk.services.AbstractService;
 import fr.nikk.services.couchdb.CouchdbService;
 import fr.nikk.services.couchdb.repository.NoteDAO;
+import fr.nikk.services.http.HttpService;
 import fr.nikk.services.rest.RESTService;
 
 /**
@@ -17,6 +18,8 @@ public class Controller extends AbstractService{
 	private CouchdbService couch;
 	
 	private RESTService rest;
+	
+	private HttpService http;
 	
 	private NoteDAO note;
 	
@@ -39,6 +42,9 @@ public class Controller extends AbstractService{
 		this.rest.getNc().setDao(this.note);
 		this.rest.start();
 		
+		this.http = new HttpService();
+		this.http.addServlet(NoteController.class, "/*");
+		this.http.start();
 	}
 
 	@Override
