@@ -36,7 +36,7 @@ public class RESTService extends AbstractService {
 					new SingletonResourceProvider(controller));	
 		}
 		
-		serverFactory.setAddress("http://localhost:9000/");
+		serverFactory.setAddress("http://localhost:9000/"); // TODO Conf
 		this.server = serverFactory.create();
 	}
 
