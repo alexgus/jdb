@@ -3,9 +3,10 @@
  */
 package fr.nikk.services.http;
 
-import javax.servlet.http.HttpServlet;
+import javax.servlet.Servlet;
 
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import fr.nikk.services.Service;
@@ -52,11 +53,11 @@ public class HttpService implements Service {
 	
 	/**
 	 * Add a servlet to this service
-	 * @param c The servlet to add
+	 * @param servlet The servlet to add
 	 * @param path The path to map this servlet on
 	 */
-	public void addServlet(Class<? extends HttpServlet> c, String path){
-		this.context.addServlet(c, path);
+	public void addServlet(Servlet servlet, String path){
+		this.context.addServlet(new ServletHolder(servlet), path);
 	}
 
 	/* (non-Javadoc)

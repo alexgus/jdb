@@ -3,7 +3,7 @@
  */
 package fr.nikk.jdb;
 
-import fr.nikk.jdb.controller.Controller;
+import fr.nikk.jdb.controller.MainController;
 
 /**
  * @author Alexandre Guyon
@@ -16,7 +16,7 @@ public class Launch {
 	 * @param args not used
 	 */
 	public static void main(String[] args) {
-		Controller c = new Controller();
+		MainController c = new MainController();
 		c.start();
 	}
 

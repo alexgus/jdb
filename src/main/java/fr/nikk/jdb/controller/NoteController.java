@@ -37,7 +37,7 @@ import fr.nikk.services.couchdb.repository.UnimplementedOperationException;
  */
 @Produces("text/json")
 @Path("/note")
-public class NoteController extends HttpServlet{
+public class NoteController extends HttpServlet implements Controller{
 
 	private static final long serialVersionUID = -4819435890845510207L;
 
