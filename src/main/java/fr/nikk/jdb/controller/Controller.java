@@ -43,7 +43,7 @@ public class Controller extends AbstractService{
 		this.rest.start();
 		
 		this.http = new HttpService();
-		this.http.addServlet(NoteController.class, "/*");
+		this.http.addServlet(NoteController.class, "/note");
 		this.http.start();
 	}
 

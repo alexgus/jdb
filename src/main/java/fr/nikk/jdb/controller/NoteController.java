@@ -275,8 +275,9 @@ public class NoteController extends HttpServlet{
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		super.doGet(req, resp);
-		resp.getWriter().append("<h1>Coucou</h1");
+		resp.setContentType("text/html;charset=utf-8");
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.getWriter().println("coucou!");
 	}
 	
 	/**

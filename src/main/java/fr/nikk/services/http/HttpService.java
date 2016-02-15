@@ -31,6 +31,7 @@ public class HttpService implements Service {
 		public void run() {
 			try {
 				HttpService.this.getServer().start();
+				HttpService.this.context.dumpStdErr();
 				HttpService.this.getServer().join();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -46,7 +47,7 @@ public class HttpService implements Service {
 		this.server = new Server(DEFAULT_PORT);
 		this.context = new WebAppContext();
 		this.context.setContextPath("/");
-		//this.context.setDescriptor("web.xml");
+		this.context.setResourceBase(""); // ugly hack
 		this.server.setHandler(this.context);
 	}
 	
