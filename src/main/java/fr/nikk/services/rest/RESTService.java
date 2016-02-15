@@ -6,6 +6,7 @@ package fr.nikk.services.rest;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
 
@@ -18,7 +19,7 @@ import fr.nikk.services.AbstractService;
  */
 public class RESTService extends AbstractService {
 
-	private JAXRSServerFactoryBean server;
+	private Server server;
 	
 	private List<Controller> lContr = new ArrayList<>();
 
@@ -27,16 +28,16 @@ public class RESTService extends AbstractService {
 	 */
 	@Override
 	public void start() { // FIXME Conf with all annotated class
-		this.server = new JAXRSServerFactoryBean();
+		JAXRSServerFactoryBean serverFactory = new JAXRSServerFactoryBean();
 		for (Controller controller : this.lContr) {
 			Class<?> controllerClass = controller.getClass();
-			this.server.setResourceClasses(controllerClass);
-			this.server.setResourceProvider(controllerClass, 
+			serverFactory.setResourceClasses(controllerClass);
+			serverFactory.setResourceProvider(controllerClass, 
 					new SingletonResourceProvider(controller));	
 		}
 		
-		this.server.setAddress("http://localhost:9000/");
-		this.server.create();
+		serverFactory.setAddress("http://localhost:9000/");
+		this.server = serverFactory.create();
 	}
 
 	/* (non-Javadoc)
@@ -44,7 +45,7 @@ public class RESTService extends AbstractService {
 	 */
 	@Override
 	public void stop() {
-		// FIXME Stop server
+		this.server.stop();
 	}
 	
 	/**
