@@ -1,16 +1,8 @@
 package fr.nikk.jdb.controller;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -18,10 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.lightcouch.Response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,19 +20,22 @@ import fr.nikk.services.couchdb.repository.NoteDAO;
 import fr.nikk.services.couchdb.repository.UnimplementedOperationException;
 
 /**
- * 
+ * Controller using REST API.
  * @author Alexandre Guyon
  *
  */
 @Produces("text/json")
 @Path("/note")
-public class NoteController extends HttpServlet implements Controller{
-
-	private static final long serialVersionUID = -4819435890845510207L;
+public class NoteController implements Controller{
 
 	private NoteDAO dao;
 	
 	private ObjectMapper mapper = new ObjectMapper();
+	
+	/**
+	 * Using other controller for other data, too large to be passed by REST (URL limitation)
+	 */
+	private ContentNoteController bigDataController = new ContentNoteController();
 	
 	/**
 	 * Add a note
@@ -54,26 +46,7 @@ public class NoteController extends HttpServlet implements Controller{
 	@POST
 	@Path("/{tag}/{note}")
 	public String addNote(@PathParam("tag") String tag, @PathParam("note") String note){
-		Note n = new Note();
-		n.setNote(note);
-		n.setTag(tag);
-		try {
-			Response r = this.dao.save(n);
-			n.set_id(r.getId());
-			n.set_rev(r.getRev());
-			
-			String ret = "";
-			try {
-				ret = this.mapper.writeValueAsString(n);
-			} catch (JsonProcessingException e) {
-				ret = "jdb error :\n";
-				ret += e.getMessage();
-			}
-			return ret;
-		} catch (UnimplementedOperationException e1) {
-			e1.printStackTrace();	
-			return "";
-		}
+		return this.addNote(tag, note);
 	}
 	
 	/**
@@ -86,25 +59,7 @@ public class NoteController extends HttpServlet implements Controller{
 	@POST
 	@Path("/{tag}/{note}/{date}")
 	public String addDateNote(@PathParam("tag") String tag, @PathParam("note") String note, Date d){
-		Note n = new Note();
-		n.setNote(note);
-		n.setTag(tag);
-		n.setDate(d);
-		try {
-			this.dao.save(n);
-			
-			String ret = "";
-			try {
-				ret = this.mapper.writeValueAsString(n);
-			} catch (JsonProcessingException e) {
-				ret = "jdb error :\n";
-				ret += e.getMessage();
-			}
-			return ret;
-		} catch (UnimplementedOperationException e1) {
-			e1.printStackTrace();	
-			return "";
-		}
+		return this.bigDataController.addDateNote(tag, note, d);
 	}
 	
 	/**
@@ -118,50 +73,7 @@ public class NoteController extends HttpServlet implements Controller{
 	@POST
 	@Path("/{id}/{rev}/{tag}/{note}")
 	public String modNote(@PathParam("id")String id, @PathParam("rev") String rev, @PathParam("tag") String tag, @PathParam("note") String note){
-		DateFormat df = DateFormat.getDateInstance();
-		
-		Note n = new Note();
-		n.set_id(id);
-		n.set_rev(rev);
-		n.setTag(tag);
-		n.setNote(note);
-		List<Date> d = new ArrayList<>();
-		
-		this.dao.getRevisions(n);
-		
-		JSONObject js = new JSONObject(this.dao.getByIdAndRev(id, rev));
-		if(js.has("dateModif")){
-			JSONArray dates = js.getJSONArray("dateModif");			
-			
-			for (int i= 0 ; i < dates.length() ; ++i){
-				try {
-					d.add(df.parse(dates.getString(i)));
-				} catch (JSONException | ParseException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		d.add(new Date());
-		n.setDateModif(d);
-		
-		if(js.has("date")){
-			try {
-				n.setDate(df.parse(js.getString("date")));
-			} catch (JSONException | ParseException e1) {
-				e1.printStackTrace();
-			}
-		}else
-			return "{\"status\" : \"no creation date in database\"}";
-
-		try {
-			Response r = this.dao.update(n);
-			n.set_rev(r.getRev());
-			return this.mapper.writeValueAsString(n);
-		} catch (UnimplementedOperationException | JsonProcessingException e) {
-			e.printStackTrace();
-			return "{\"status\" : \"error\"}";
-		}
+		return this.bigDataController.modNote(id, rev, tag, note);
 	}
 	
 	/**
@@ -273,18 +185,19 @@ public class NoteController extends HttpServlet implements Controller{
 		return res;
 	}
 	
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setContentType("text/html;charset=utf-8");
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().println("coucou!");
-	}
-	
 	/**
 	 * @param dao the dao to set
 	 */
 	public void setDao(NoteDAO dao) {
 		this.dao = dao;
+		this.bigDataController.setDao(dao);
+	}
+
+	/**
+	 * @return the bigDataController
+	 */
+	public ContentNoteController getBigDataController() {
+		return this.bigDataController;
 	}
 
 }

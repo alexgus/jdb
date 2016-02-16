@@ -45,7 +45,7 @@ public class MainController extends AbstractService{
 		this.rest.start();
 		
 		this.http = new HttpService();
-		this.http.addServlet(this.note, "/test");
+		this.http.addServlet(this.note.getBigDataController(), "/*");
 		this.http.start();
 	}
 

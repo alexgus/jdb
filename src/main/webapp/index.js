@@ -1,4 +1,5 @@
 var noteServiceURL = "http://localhost/proxy9000";
+var noteServiceBigDataURL = "http://localhost/proxy8080";
 var pageURL = "http://localhost/jdb"; // TODO could be deduce with page info
 
 var notes;
@@ -83,20 +84,39 @@ function getNotes(){
 
 function sendNote(i){
 	var urlPOST;
+	var _data;
 	var note = toURL($("#textEdit").html());
 	var tag = toURL($("#tag").val());
 	
-	if(i != undefined){
+	/*if(i != undefined){
 		urlPOST = noteServiceURL + "/note/"+notes[i]._id+"/"+notes[i]._rev + "/" + tag + "/" + note;
 	}
 	else{
 		urlPOST = noteServiceURL + "/note/"+ tag + "/" + note;
-    }
+    }*/
+	
+	if(i != undefined){
+		urlPOST = noteServiceBigDataURL + "/note/"+notes[i]._id+"/"+notes[i]._rev + "/" + tag + "/" + note;
+		_data = {
+				"id" : notes[i]._id,
+				"rev" : notes[i]._rev,
+				"tag" : tag,
+				"note" : note
+		}
+	}
+	else{
+		urlPOST = noteServiceBigDataURL + "/note/"+ tag + "/" + note;
+		_data = {
+				"tag" : tag,
+				"note" : note
+		}
+	}
 	
 	console.log(urlPOST)
 	$.ajax({
 		method: "POST",
 		url: urlPOST,
+		data : _data,
 		success : function(data){
 			$("#notif").html("<div class=\"alert alert-success\" role=\"alert\">Saved !</div>");
 			if(i != undefined){
