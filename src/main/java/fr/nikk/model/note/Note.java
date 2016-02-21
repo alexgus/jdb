@@ -15,9 +15,9 @@ import fr.nikk.services.couchdb.StorableEntity;
  */
 public class Note extends StorableEntity{
 	
-	private Date date;
+	private Date date; // FIXME Timestamp
 	
-	private List<Date> dateModif;
+	private List<Date> dateModif; // FIXME Timestamp
 
 	private String tag;
 
