@@ -9,6 +9,8 @@
 
 	<properties>
 		<jackson.version>2.7.0</jackson.version>
+		<cxf.version>3.0.0-milestone1</cxf.version>
+		<jetty.version>8.1.14.v20131031</jetty.version>
 	</properties>
 
 	<dependencies>
@@ -16,57 +18,68 @@
 			<groupId>org.lightcouch</groupId>
 			<artifactId>lightcouch</artifactId>
 			<version>0.1.8</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20140107</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
 			<version>${jackson.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>${jackson.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
-			<version>3.0.0-milestone1</version>
+			<version>${cxf.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-transports-http</artifactId>
-			<version>3.0.0-milestone1</version>
+			<version>${cxf.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-transports-http-jetty</artifactId>
-			<version>3.0.0-milestone1</version>
+			<version>${cxf.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency> <!-- Other jetty (server, util, etc) needed are dependencies of apache cxf -->
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-webapp</artifactId>
-			<version>8.1.14.v20131031</version>
+			<version>${jetty.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-servlet</artifactId>
-			<version>8.1.14.v20131031</version>
+			<version>${jetty.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-annotations</artifactId>
-			<version>8.1.14.v20131031</version>
+			<version>${jetty.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.7.5</version>
+			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>
@@ -83,6 +96,18 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+				<version>2.6</version>
+                <configuration>
+                        <archive>
+                                <manifest>
+                                        <mainClass>fr.nikk.jdb.Launch</mainClass>
+                                </manifest>
+                        </archive>
+                </configuration>
+           	</plugin>
 		</plugins>
 	</build>
 
