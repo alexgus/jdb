@@ -3,8 +3,8 @@
  */
 package fr.nikk.model.note;
 
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import fr.nikk.services.couchdb.StorableEntity;
@@ -15,9 +15,9 @@ import fr.nikk.services.couchdb.StorableEntity;
  */
 public class Note extends StorableEntity{
 	
-	private Date date; // FIXME Timestamp
+	private Instant date; // FIXME Timestamp
 	
-	private List<Date> dateModif; // FIXME Timestamp
+	private List<Instant> dateModif; // FIXME Timestamp
 
 	private String tag;
 
@@ -30,7 +30,7 @@ public class Note extends StorableEntity{
 	 */
 	public Note(){
 		super(Note.class.getName());
-		this.date = new Date();
+		this.date = Instant.now();
 		this.dateModif = new ArrayList<>();
 	}
 	
@@ -40,7 +40,7 @@ public class Note extends StorableEntity{
 	public Note(String note) {
 		super(Note.class.getName());
 		this.note = note;
-		this.date = new Date();
+		this.date = Instant.now();
 		this.dateModif = new ArrayList<>();
 	}
 
@@ -48,7 +48,7 @@ public class Note extends StorableEntity{
 	 * @param d The date to create the note
 	 * @param s The string in the note
 	 */
-	public Note(Date d, String s){
+	public Note(Instant d, String s){
 		super(Note.class.getName());
 		this.date = d;
 		this.note = s;
@@ -58,14 +58,14 @@ public class Note extends StorableEntity{
 	/**
 	 * @return the date
 	 */
-	public Date getDate() {
+	public Instant getDate() {
 		return this.date;
 	}
 
 	/**
 	 * @param date the date to set
 	 */
-	public void setDate(Date date) {
+	public void setDate(Instant date) {
 		this.date = date;
 	}
 
@@ -100,14 +100,14 @@ public class Note extends StorableEntity{
 	/**
 	 * @return the dateModif
 	 */
-	public List<Date> getDateModif() {
+	public List<Instant> getDateModif() {
 		return this.dateModif;
 	}
 
 	/**
 	 * @param dateModif the dateModif to set
 	 */
-	public void setDateModif(List<Date> dateModif) {
+	public void setDateModif(List<Instant> dateModif) {
 		this.dateModif = dateModif;
 	}
 

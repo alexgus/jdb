@@ -4,10 +4,8 @@
 package fr.nikk.jdb.controller;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -108,11 +106,11 @@ public class ContentNoteController extends HttpServlet implements Controller {
 	 */
 	@POST
 	@Path("/{tag}/{note}/{date}")
-	public String addDateNote(@PathParam("tag") String tag, @PathParam("note") String note, Date d){
+	public String addDateNote(@PathParam("tag") String tag, @PathParam("note") String note, @PathParam("date") String d){
 		Note n = new Note();
 		n.setNote(note);
 		n.setTag(tag);
-		n.setDate(d);
+		n.setDate(Instant.parse(d));
 		try {
 			this.dao.save(n);
 			
@@ -140,15 +138,13 @@ public class ContentNoteController extends HttpServlet implements Controller {
 	 */
 	@POST
 	@Path("/{id}/{rev}/{tag}/{note}")
-	public String modNote(@PathParam("id")String id, @PathParam("rev") String rev, @PathParam("tag") String tag, @PathParam("note") String note){
-		DateFormat df = DateFormat.getDateInstance();
-		
+	public String modNote(@PathParam("id")String id, @PathParam("rev") String rev, @PathParam("tag") String tag, @PathParam("note") String note){		
 		Note n = new Note();
 		n.set_id(id);
 		n.set_rev(rev);
 		n.setTag(tag);
 		n.setNote(note);
-		List<Date> d = new ArrayList<>();
+		List<Instant> d = new ArrayList<>();
 		
 		this.dao.getRevisions(n);
 		
@@ -158,20 +154,20 @@ public class ContentNoteController extends HttpServlet implements Controller {
 			
 			for (int i= 0 ; i < dates.length() ; ++i){
 				try {
-					d.add(df.parse(dates.getString(i)));
-				} catch (JSONException | ParseException e) {
+					d.add(Instant.parse(dates.getString(i)));
+				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 			}
 		}
 		
-		d.add(new Date());
+		d.add(Instant.now());
 		n.setDateModif(d);
 		
 		if(js.has("date")){
 			try {
-				n.setDate(df.parse(js.getString("date")));
-			} catch (JSONException | ParseException e1) {
+				n.setDate(Instant.parse(js.getString("date")));
+			} catch (JSONException e1) {
 				e1.printStackTrace();
 			}
 		}else

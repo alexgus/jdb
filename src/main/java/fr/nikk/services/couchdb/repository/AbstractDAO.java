@@ -24,6 +24,7 @@ import org.lightcouch.View;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import fr.nikk.services.couchdb.StorableEntity;
 import fr.nikk.util.BasicIO;
@@ -87,6 +88,12 @@ public abstract class AbstractDAO<D extends StorableEntity> implements DAO<D> {
 	 * Configured couchdb session
 	 */
 	protected CouchDbClient couch;
+	
+	/**
+	 * Object mapper
+	 */
+	protected ObjectMapper mapper = new ObjectMapper();
+	
 
 	/**
 	 * Setup with classname to handle
@@ -114,7 +121,8 @@ public abstract class AbstractDAO<D extends StorableEntity> implements DAO<D> {
 		this.couch = s;
 		s.design().synchronizeWithDb(s.design().getFromDesk(this.designDoc));
 
-		
+		this.mapper.registerModule(new JavaTimeModule());
+		this.mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 	}
 	
 	/**
@@ -202,7 +210,7 @@ public abstract class AbstractDAO<D extends StorableEntity> implements DAO<D> {
 	}
 	
 	@SuppressWarnings("resource")
-	private InputStream getByIdAndRevIntern(String id, String rev){
+	private InputStream getByIdAndRevInternRaw(String id, String rev){
 		InputStream is = null;
 		if(rev != null)
 			is = this.couch.find(id, rev);
@@ -211,23 +219,37 @@ public abstract class AbstractDAO<D extends StorableEntity> implements DAO<D> {
 		return is;
 	}
 	
-	@SuppressWarnings("resource")
 	@Override
-	public String getByIdAndRevRaw(String id, String rev){
-		InputStream is = this.getByIdAndRevIntern(id, rev);
-		return BasicIO.readInputStream(is);
+	public D getByIdAndRev(String id, String rev){
+		D ret = null;
+		if(rev != null)
+			ret = this.couch.find(this.typeToHandle, id, rev);
+		else
+			ret = this.couch.find(this.typeToHandle, id);
+		return ret;
 	}
 	
 	@SuppressWarnings("resource")
 	@Override
-	public D getByIdAndRev(String id, String rev){
-		InputStream is = this.getByIdAndRevIntern(id, rev);
+	public String getByIdAndRevRaw(String id, String rev){
+		InputStream is = this.getByIdAndRevInternRaw(id, rev);
+		return BasicIO.readInputStream(is);
+	}
+	
+	/**
+	 * Get objects from raw query. Can throw exception
+	 * @param id Id to search
+	 * @param rev rev to search or null
+	 * @return The document searched
+	 */
+	@Deprecated
+	@SuppressWarnings("resource")
+	public D getByIdAndRevFromRaw(String id, String rev){
+		InputStream is = this.getByIdAndRevInternRaw(id, rev);
 		D ret = null;
 		
 		try {
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-			ret = mapper.readValue(is, this.typeToHandle);
+			ret = this.mapper.readValue(is, this.typeToHandle);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

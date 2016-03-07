@@ -1,6 +1,5 @@
 package fr.nikk.jdb.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
@@ -13,7 +12,9 @@ import javax.ws.rs.Produces;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import fr.nikk.model.note.Note;
 import fr.nikk.services.couchdb.repository.NoteDAO;
@@ -38,6 +39,14 @@ public class NoteController implements Controller{
 	private ContentNoteController bigDataController = new ContentNoteController();
 	
 	/**
+	 * Default constructor
+	 */
+	public NoteController() {
+		this.mapper.registerModule(new JavaTimeModule());
+		this.mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+	}
+	
+	/**
 	 * Add a note
 	 * @param tag Tag, comma separated
 	 * @param note Note
@@ -58,7 +67,7 @@ public class NoteController implements Controller{
 	 */
 	@POST
 	@Path("/{tag}/{note}/{date}")
-	public String addDateNote(@PathParam("tag") String tag, @PathParam("note") String note, Date d){
+	public String addDateNote(@PathParam("tag") String tag, @PathParam("note") String note, @PathParam("date") String d){
 		return this.bigDataController.addDateNote(tag, note, d);
 	}
 	
