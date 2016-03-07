@@ -44,7 +44,7 @@ public class HttpService implements Service {
 	 * Inititialize web server without launching it.
 	 */
 	public HttpService() {
-		this.server = new Server(DEFAULT_PORT);
+		this.server = new Server(DEFAULT_PORT); // TODO Find a running instance of jetty and add handler to it
 		this.context = new WebAppContext();
 		this.context.setContextPath("/");
 		this.context.setResourceBase(""); // ugly hack
