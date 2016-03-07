@@ -85,15 +85,8 @@ function getNotes(){
 function sendNote(i){
 	var urlPOST;
 	var _data;
-	var note = toURL($("#textEdit").html());
-	var tag = toURL($("#tag").val());
-	
-	/*if(i != undefined){
-		urlPOST = noteServiceURL + "/note/"+notes[i]._id+"/"+notes[i]._rev + "/" + tag + "/" + note;
-	}
-	else{
-		urlPOST = noteServiceURL + "/note/"+ tag + "/" + note;
-    }*/
+	var note = $("#textEdit").html();
+	var tag = $("#tag").val();
 	
 	if(i != undefined){
 		urlPOST = noteServiceBigDataURL + "/note/"+notes[i]._id+"/"+notes[i]._rev + "/" + tag + "/" + note;
