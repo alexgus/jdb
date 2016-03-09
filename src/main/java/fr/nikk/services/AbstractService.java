@@ -3,7 +3,8 @@
  */
 package fr.nikk.services;
 
-// TODO add dependencies to other services (exception too)
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Alexandre Guyon
@@ -15,6 +16,8 @@ public abstract class AbstractService implements Service {
 	 * Configuration of the service
 	 */
 	protected Conf<?> config;
+	
+	protected List<Service> dependencies = new ArrayList<>();
 
 	/* (non-Javadoc)
 	 * @see fr.utbm.to52.smarthome.services.Service#start()
