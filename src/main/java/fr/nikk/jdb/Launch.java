@@ -17,7 +17,13 @@ public class Launch {
 	 */
 	public static void main(String[] args) {
 		MainController c = new MainController();
-		c.start();
+		Thread t = new Thread(c);
+		t.start();
+		try {
+			t.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

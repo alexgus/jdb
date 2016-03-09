@@ -55,4 +55,9 @@ public class MainController extends AbstractService{
 		this.rest.stop();
 	}
 
+	@Override
+	public void run() {
+		this.start();
+	}
+
 }

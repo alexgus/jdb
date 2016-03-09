@@ -64,4 +64,9 @@ public class RESTService extends AbstractService {
 		return this.lContr;
 	}
 
+	@Override
+	public void run() {
+		this.start();
+	}
+
 }

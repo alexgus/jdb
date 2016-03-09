@@ -51,4 +51,9 @@ public class CouchdbService extends AbstractService {
 		return this.session;
 	}
 
+	@Override
+	public void run() {
+		this.start();
+	}
+
 }

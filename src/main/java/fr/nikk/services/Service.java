@@ -3,15 +3,13 @@
  */
 package fr.nikk.services;
 
-// TODO implement Runnable
-
 /**
  * Define how service mean to be used
  * 
  * @author Alexandre Guyon
  *
  */
-public interface Service {
+public interface Service  extends Runnable {
 	
 	/**
 	 * Start the service

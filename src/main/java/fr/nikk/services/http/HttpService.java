@@ -109,4 +109,9 @@ public class HttpService implements Service {
 		this.context = context;
 	}
 
+	@Override
+	public void run() {
+		this.start();
+	}
+
 }
