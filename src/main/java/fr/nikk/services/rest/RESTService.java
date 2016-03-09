@@ -29,7 +29,7 @@ public class RESTService extends AbstractService {
 	 * @see fr.nikk.services.AbstractService#start()
 	 */
 	@Override
-	public void start() { // FIXME Conf with all annotated class
+	public void start() {
 		JAXRSServerFactoryBean serverFactory = new JAXRSServerFactoryBean();
 		for (Controller controller : this.lContr) {
 			Class<?> controllerClass = controller.getClass();
