@@ -29,8 +29,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import fr.nikk.services.couchdb.StorableEntity;
 import fr.nikk.util.BasicIO;
 
-// TODO add response
-
 /**
  * @author Alexandre Guyon
  * @param <D> Data to handle in DAO
@@ -339,11 +337,13 @@ public abstract class AbstractDAO<D extends StorableEntity> implements DAO<D> {
 	}
 
 	@Override
-	public void delete(D data) throws UnimplementedOperationException{
+	public Response delete(D data) throws UnimplementedOperationException{
+		Response r;
 		if(this.available_actions.contains(ACTION_DELETE))
-			this.couch.remove(data);
+			r = this.couch.remove(data);
 		else
 			throw new UnimplementedOperationException(ACTION_DELETE + " : not for now");
+		return r;
 	}
 
 	/**
