@@ -23,7 +23,7 @@ public class MissingDependencies extends Exception {
 	}
 
 	public String getService() {
-		return service;
+		return this.service;
 	}
 
 	public void setService(String service) {

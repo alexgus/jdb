@@ -53,7 +53,7 @@ public interface DAO<D extends StorableEntity>{
 	/**
 	 * Delete an object in database (D in CRUD)
 	 * @param data Delete selected data
-	 * @return 
+	 * @return The server's response
 	 * @throws UnimplementedOperationException If the method does not exist for the DAO
 	 */
 	public Response delete(D data) throws UnimplementedOperationException;

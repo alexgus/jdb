@@ -17,6 +17,9 @@ public abstract class AbstractService implements Service {
 	 */
 	protected Conf<?> config;
 	
+	/**
+	 * Service depending on other services
+	 */
 	protected List<Service> dependencies = new ArrayList<>();
 
 	/* (non-Javadoc)
