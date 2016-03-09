@@ -19,6 +19,8 @@ import fr.nikk.services.AbstractService;
  */
 public class RESTService extends AbstractService {
 
+	private final static String URL = "http://localhost:9000/";
+	
 	private Server server;
 	
 	private List<Controller> lContr = new ArrayList<>();
@@ -36,7 +38,7 @@ public class RESTService extends AbstractService {
 					new SingletonResourceProvider(controller));	
 		}
 		
-		serverFactory.setAddress("http://localhost:9000/"); // TODO Conf
+		serverFactory.setAddress(RESTService.URL);
 		this.server = serverFactory.create();
 	}
 
