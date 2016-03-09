@@ -22,13 +22,18 @@ import org.json.JSONObject;
 import org.lightcouch.Response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import fr.nikk.model.note.Note;
 import fr.nikk.services.couchdb.repository.NoteDAO;
 import fr.nikk.services.couchdb.repository.UnimplementedOperationException;
 
+// TODO innerclass
 /**
+ * The {@link ContentNoteController} deals with much bigger data than {@link NoteController} in upload for the client,
+ * data that can not be sent by REST.
  * @author Alexandre Guyon
  *
  */
@@ -40,6 +45,14 @@ public class ContentNoteController extends HttpServlet implements Controller {
 	
 	private ObjectMapper mapper = new ObjectMapper();
 	
+	/**
+	 * Default constructor
+	 */
+	public ContentNoteController() {
+		this.mapper.registerModule(new JavaTimeModule());
+		this.mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+	}
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("text/html;charset=utf-8");
@@ -49,7 +62,6 @@ public class ContentNoteController extends HttpServlet implements Controller {
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		System.out.println(req.getRequestURI());
 		if(req.getParameterMap().containsKey("note") && req.getParameterMap().containsKey("tag")){
 			String note = req.getParameter("note");
 			String tag = req.getParameter("tag");

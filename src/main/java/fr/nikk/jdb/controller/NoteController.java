@@ -96,16 +96,15 @@ public class NoteController implements Controller{
 		try {
 			List<Note> ln = this.dao.getData();
 			try {
-				return this.mapper.writeValueAsString(ln); 
+				ret = this.mapper.writeValueAsString(ln);
 			} catch (JsonProcessingException e) {
 				ret = "jdb error :\n";
 				ret += e.getMessage();
-				return ret;
 			}
 		} catch (UnimplementedOperationException e) {
 			e.printStackTrace();
-			return ret;
 		}
+		return ret;
 	}
 	
 	/**
