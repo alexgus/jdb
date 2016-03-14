@@ -26,8 +26,6 @@ public class HttpService implements Service {
 	
 	private Server server;
 	
-	private Proxy proxy;
-	
 	private HandlerList hl;
 	
 	private ResourceHandler staticHandler;
@@ -68,11 +66,17 @@ public class HttpService implements Service {
 		this.hl.addHandler(this.staticHandler);
 		this.hl.addHandler(this.servletContext);
 		
-		this.proxy = new Proxy("http://www.google.com");
-		this.addServlet(this.proxy, "/proxy/*");
-		
 		// Add it to server
 		this.server.setHandler(hl);
+	}
+	
+	/**
+	 * Shortcut of addservlet, for proxy
+	 * @param p Proxy class
+	 * @param path Path to listen on
+	 */
+	public void addProxy(Proxy p, String path){
+		this.addServlet(p, path);
 	}
 	
 	/**

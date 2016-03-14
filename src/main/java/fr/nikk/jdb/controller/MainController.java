@@ -7,6 +7,7 @@ import fr.nikk.services.AbstractService;
 import fr.nikk.services.couchdb.CouchdbService;
 import fr.nikk.services.couchdb.repository.NoteDAO;
 import fr.nikk.services.http.HttpService;
+import fr.nikk.services.http.Proxy;
 import fr.nikk.services.rest.RESTService;
 
 /**
@@ -44,7 +45,9 @@ public class MainController extends AbstractService{
 		this.rest.addController(this.note);
 		this.rest.start();
 		
+		Proxy p = new Proxy(RESTService.URL);
 		this.http = new HttpService();
+		this.http.addProxy(p, "/rest/*");
 		this.http.addServlet(this.note.getBigDataController(), "/*");
 		this.http.start();
 	}
