@@ -6,6 +6,7 @@ package fr.nikk.services.http;
 import javax.servlet.Servlet;
 
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -24,6 +25,10 @@ public class HttpService implements Service {
 	public static final int DEFAULT_PORT = 8080;
 	
 	private Server server;
+	
+	private HandlerList hl;
+	
+	private ResourceHandler staticHandler;
 	
 	private WebAppContext context;
 	
@@ -46,16 +51,23 @@ public class HttpService implements Service {
 	 */
 	public HttpService() {
 		this.server = new Server(DEFAULT_PORT); // TODO Find a running instance of jetty and add handler to it
+		
+		// Add a web context for supporting servlet
 		this.context = new WebAppContext();
 		this.context.setContextPath("/");
 		this.context.setResourceBase(""); // ugly hack
-		this.server.setHandler(this.context);
 		
-		ResourceHandler r = new ResourceHandler();
-		r.setDirectoriesListed(true);
-		r.setResourceBase("./src/main/webapp");
+		// Add static http
+		this.staticHandler = new ResourceHandler();
+		this.staticHandler.setResourceBase("./src/main/webapp"); // TODO param
 		
-		this.server.setHandler(r);
+		// merge handers
+		this.hl = new HandlerList();
+		this.hl.addHandler(this.staticHandler);
+		this.hl.addHandler(this.context);
+		
+		// Add it to server
+		this.server.setHandler(hl);
 	}
 	
 	/**
