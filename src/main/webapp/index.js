@@ -162,9 +162,11 @@ function getTags(){
 		method: "GET",
 		url: noteServiceURL + "/note/gTag",
 		success : function(d){
-			tags = new Array();
-			for(var i = 0 ; i < d.rows.length ; ++i)
-				tags[tags.length] = d.rows[i].key
+			if(d != undefined && d != null){
+				tags = new Array();
+				for(var i = 0 ; i < d.rows.length ; ++i)
+					tags[tags.length] = d.rows[i].key
+			}
 		},
 		error: function(xhr, status, error){
 			console.log(xhr);
