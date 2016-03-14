@@ -6,6 +6,7 @@ package fr.nikk.services.http;
 import javax.servlet.Servlet;
 
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -49,6 +50,12 @@ public class HttpService implements Service {
 		this.context.setContextPath("/");
 		this.context.setResourceBase(""); // ugly hack
 		this.server.setHandler(this.context);
+		
+		ResourceHandler r = new ResourceHandler();
+		r.setDirectoriesListed(true);
+		r.setResourceBase("./src/main/webapp");
+		
+		this.server.setHandler(r);
 	}
 	
 	/**
