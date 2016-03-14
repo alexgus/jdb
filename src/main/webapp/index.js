@@ -1,4 +1,4 @@
-var noteServiceURL = "http://localhost:8080/proxy/";
+var noteServiceURL = "http://localhost:8080/rest/";
 var noteServiceBigDataURL = "http://localhost:8080/";
 var pageURL = "http://localhost:8080"; // TODO could be deduce with page info
 
@@ -68,6 +68,7 @@ function getNotes(){
 	$.ajax({
 		method: "GET",
 		url: noteServiceURL + "/note",
+		dataType : "json",
 		success : function(d){
 			notes = d;
 			for(var i = 0 ; i < d.length ; ++i){
@@ -161,9 +162,9 @@ function getTags(){
 	$.ajax({
 		method: "GET",
 		url: noteServiceURL + "/note/gTag",
-		success : function(d){
+		dataType : "json",
+		success : function(d){			
 			if(d != undefined && d != null && d != ""){
-				console.log(d);
 				tags = new Array();
 				for(var i = 0 ; i < d.rows.length ; ++i)
 					tags[tags.length] = d.rows[i].key
