@@ -1,6 +1,6 @@
-var noteServiceURL = "http://localhost/proxy9000";
-var noteServiceBigDataURL = "http://localhost/proxy8080";
-var pageURL = "http://localhost/jdb"; // TODO could be deduce with page info
+var noteServiceURL = "http://localhost:8080/proxy/";
+var noteServiceBigDataURL = "http://localhost:8080/";
+var pageURL = "http://localhost:8080"; // TODO could be deduce with page info
 
 var notes;
 var tags = new Array();
@@ -196,8 +196,10 @@ function searchTag(){
 var editing;
 function openEdit(i){
 	editing = i;
+	console.log(pageURL + "/form.html");
 	$.ajax({
 		method: "POST",
+		dataType : "text",
 		url: pageURL + "/form.html",
 		success : function(data){
 			$("#in").html(data);
