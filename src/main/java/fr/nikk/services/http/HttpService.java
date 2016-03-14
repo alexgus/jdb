@@ -26,11 +26,13 @@ public class HttpService implements Service {
 	
 	private Server server;
 	
+	private Proxy proxy;
+	
 	private HandlerList hl;
 	
 	private ResourceHandler staticHandler;
 	
-	private WebAppContext context;
+	private WebAppContext servletContext;
 	
 	private Runnable serverThread = new Runnable() {
 		
@@ -53,9 +55,9 @@ public class HttpService implements Service {
 		this.server = new Server(DEFAULT_PORT); // TODO Find a running instance of jetty and add handler to it
 		
 		// Add a web context for supporting servlet
-		this.context = new WebAppContext();
-		this.context.setContextPath("/");
-		this.context.setResourceBase(""); // ugly hack
+		this.servletContext = new WebAppContext();
+		this.servletContext.setContextPath("/");
+		this.servletContext.setResourceBase(""); // ugly hack
 		
 		// Add static http
 		this.staticHandler = new ResourceHandler();
@@ -64,7 +66,10 @@ public class HttpService implements Service {
 		// merge handers
 		this.hl = new HandlerList();
 		this.hl.addHandler(this.staticHandler);
-		this.hl.addHandler(this.context);
+		this.hl.addHandler(this.servletContext);
+		
+		this.proxy = new Proxy("http://www.google.com");
+		this.addServlet(this.proxy, "/proxy/*");
 		
 		// Add it to server
 		this.server.setHandler(hl);
@@ -76,7 +81,7 @@ public class HttpService implements Service {
 	 * @param path The path to map this servlet on
 	 */
 	public void addServlet(Servlet servlet, String path){
-		this.context.addServlet(new ServletHolder(servlet), path);
+		this.servletContext.addServlet(new ServletHolder(servlet), path);
 	}
 
 	/* (non-Javadoc)
@@ -118,14 +123,14 @@ public class HttpService implements Service {
 	 * @return the context
 	 */
 	public WebAppContext getContext() {
-		return this.context;
+		return this.servletContext;
 	}
 
 	/**
 	 * @param context the context to set
 	 */
 	public void setContext(WebAppContext context) {
-		this.context = context;
+		this.servletContext = context;
 	}
 
 	@Override
