@@ -199,7 +199,6 @@ function searchTag(){
 var editing;
 function openEdit(i){
 	editing = i;
-	console.log(pageURL + "/form.html");
 	$.ajax({
 		method: "POST",
 		dataType : "text",
