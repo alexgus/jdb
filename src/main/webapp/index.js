@@ -200,7 +200,7 @@ var editing;
 function openEdit(i){
 	editing = i;
 	$.ajax({
-		method: "POST",
+		method: "GET",
 		dataType : "text",
 		url: pageURL + "/form.html",
 		success : function(data){
