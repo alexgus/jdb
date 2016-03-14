@@ -162,7 +162,8 @@ function getTags(){
 		method: "GET",
 		url: noteServiceURL + "/note/gTag",
 		success : function(d){
-			if(d != undefined && d != null){
+			if(d != undefined && d != null && d != ""){
+				console.log(d);
 				tags = new Array();
 				for(var i = 0 ; i < d.rows.length ; ++i)
 					tags[tags.length] = d.rows[i].key
