@@ -67,7 +67,7 @@ public class HttpService implements Service {
 		this.hl.addHandler(this.servletContext);
 		
 		// Add it to server
-		this.server.setHandler(hl);
+		this.server.setHandler(this.hl);
 	}
 	
 	/**

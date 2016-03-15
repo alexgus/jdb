@@ -19,6 +19,9 @@ import fr.nikk.services.AbstractService;
  */
 public class RESTService extends AbstractService {
 
+	/**
+	 * URL used by the REST service
+	 */
 	public final static String URL = "http://localhost:9000/";
 	
 	private Server server;
