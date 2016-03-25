@@ -25,6 +25,13 @@ import org.apache.http.util.EntityUtils;
 public class Proxy extends HttpServlet {
 	private static final long serialVersionUID = 6729550776774642774L;
 
+	private enum HttpMethods {
+		GET,
+		POST,
+		DELETE,
+		PUT
+	}
+	
 	private final String forwardTo; 
 	
 	/**
@@ -37,16 +44,9 @@ public class Proxy extends HttpServlet {
     }
     
     @SuppressWarnings("resource")
-    /**
-     * method // TODO enum !
-     *  0 : get
-     *  1 : post
-     *  2 : delete
-     *  3 : put
-     */
-    private void forwardRequest(HttpServletRequest request, HttpServletResponse response, int method) throws IOException {
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-
+    private void forwardRequest(HttpServletRequest request, HttpServletResponse response, HttpMethods method) throws IOException {
+		CloseableHttpClient httpclient = HttpClients.createDefault();		
+		
 		// get request args
 		String uri = request.getRequestURI();
 		String r = "";
@@ -57,16 +57,16 @@ public class Proxy extends HttpServlet {
 		String forwURI = this.forwardTo + "/" + r;
         HttpRequestBase httpreq = new HttpGet(forwURI);
         switch (method) {
-			case 0:
+			case GET:
 				httpreq = new HttpGet(forwURI);
 				break;
-			case 1:
+			case POST:
 				httpreq = new HttpPost(forwURI);
 				break;
-			case 2:
+			case DELETE:
 				httpreq = new HttpDelete(forwURI);
 				break;
-			case 3:			
+			case PUT:			
 				httpreq = new HttpPut(forwURI);
 				break;
 			default:
@@ -87,21 +87,21 @@ public class Proxy extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		this.forwardRequest(request, response, 0);
+		this.forwardRequest(request, response, HttpMethods.GET);
 	}
     
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		this.forwardRequest(request, response, 2);
+		this.forwardRequest(request, response, HttpMethods.DELETE);
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		this.forwardRequest(req, resp, 1);
+		this.forwardRequest(req, resp, HttpMethods.POST);
 	}
 	
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		this.forwardRequest(req, resp, 3);
+		this.forwardRequest(req, resp, HttpMethods.PUT);
 	}
 
 }
