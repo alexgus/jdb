@@ -24,6 +24,11 @@ public class HttpService implements Service {
 	 */
 	public static final int DEFAULT_PORT = 8080;
 	
+	/**
+	 * Default resource path to look for
+	 */
+	public static final String DEFAULT_PATH = "./src/main/webapp";
+	
 	private Server server;
 	
 	private HandlerList hl;
@@ -31,6 +36,8 @@ public class HttpService implements Service {
 	private ResourceHandler staticHandler;
 	
 	private WebAppContext servletContext;
+	
+	private String resourcePath = DEFAULT_PATH;
 	
 	private Runnable serverThread = new Runnable() {
 		
@@ -47,7 +54,8 @@ public class HttpService implements Service {
 	
 	/**
 	 * Default Constructor.
-	 * Inititialize web server without launching it.
+	 * Initialize web server without launching it. 
+	 * Default values (in static) are loaded.
 	 */
 	public HttpService() {
 		this.server = new Server(DEFAULT_PORT); // TODO Find a running instance of jetty and add handler to it
@@ -59,7 +67,7 @@ public class HttpService implements Service {
 		
 		// Add static http
 		this.staticHandler = new ResourceHandler();
-		this.staticHandler.setResourceBase("./src/main/webapp"); // TODO param
+		this.staticHandler.setResourceBase(this.resourcePath);
 		
 		// merge handers
 		this.hl = new HandlerList();
@@ -135,6 +143,20 @@ public class HttpService implements Service {
 	 */
 	public void setContext(WebAppContext context) {
 		this.servletContext = context;
+	}
+	
+	/**
+	 * @return the ressourcePath
+	 */
+	public String getRessourcePath() {
+		return this.resourcePath;
+	}
+
+	/**
+	 * @param ressourcePath the ressourcePath to set
+	 */
+	public void setRessourcePath(String ressourcePath) {
+		this.resourcePath = ressourcePath;
 	}
 
 	@Override
